@@ -1,0 +1,1642 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>事故ふりかえりナビ｜フジ自動車工業</title>
+<style>
+:root{
+  --blue:#0095D9; --navy:#00467A; --blue-soft:#e7f4fb;
+  --warn:#e8821c; --warn-soft:#fff3e3;
+  --danger:#d6453c; --danger-soft:#fdecea;
+  --ok:#2e8b57; --ok-soft:#e8f6ee;
+  --ink:#10202b; --sub:#3d4b55; --line:#d8e1e8; --bg:#f4f8fb; --card:#fff;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Segoe UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+  color:var(--ink); background:var(--bg); line-height:1.72; font-size:17px;
+  -webkit-text-size-adjust:100%;
+}
+button{font-family:inherit}
+.appbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:10px 16px}
+.appbar .row{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.appbar .logo{font-weight:800;font-size:18px;letter-spacing:.02em}
+.appbar .logo small{font-weight:500;opacity:.9;font-size:12px;display:block;letter-spacing:0}
+.appbar .spacer{flex:1}
+.ghost{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.4);
+  border-radius:10px;padding:8px 13px;font-size:14px;cursor:pointer}
+.ghost:hover{background:rgba(255,255,255,.28)}
+.prog{max-width:920px;margin:8px auto 0;display:flex;gap:5px}
+.prog .seg{flex:1;height:7px;border-radius:6px;background:rgba(255,255,255,.25)}
+.prog .seg.done{background:var(--blue)}
+.prog .seg.cur{background:#fff}
+main{max-width:920px;margin:0 auto;padding:18px 16px 130px}
+.steptitle{display:flex;align-items:flex-start;gap:12px;margin:6px 0 4px}
+.steptitle .num{flex:none;width:42px;height:42px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px}
+.steptitle h2{margin:0;font-size:23px;color:var(--navy)}
+.steptitle p{margin:2px 0 0;color:var(--sub);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0;
+  box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.lead{background:var(--blue-soft);border:1px solid #cfe8f6;border-radius:var(--r);padding:16px 18px;color:#08303f;font-size:16px}
+.lead b{color:var(--navy)}
+.field{margin:14px 0}
+.field>label{display:block;font-weight:800;margin-bottom:6px;font-size:16.5px;color:var(--navy)}
+.field .hint{color:var(--sub);font-size:14px;margin:-2px 0 7px}
+input[type=text],input[type=date],input[type=datetime-local],textarea,select{
+  width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px 13px;font-size:17px;
+  color:var(--ink);background:#fff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,149,217,.15)}
+textarea{resize:vertical;min-height:64px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:620px){.two{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.chip{background:#eef4f8;border:1px solid #d4e2eb;border-radius:999px;padding:7px 13px;font-size:14px;
+  cursor:pointer;color:#1f3a4a}
+.chip:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.chip.ex{background:#fff;border-style:dashed}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.sev{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+@media(max-width:620px){.sev{grid-template-columns:1fr}}
+.sev label{display:block;border:2px solid var(--line);border-radius:var(--r);padding:16px;cursor:pointer;text-align:center;background:#fff}
+.sev label .big{font-size:32px}
+.sev label .t{font-weight:800;margin-top:4px;color:var(--navy);font-size:16px}
+.sev label .d{font-size:13px;color:var(--sub)}
+.sev input{display:none}
+.sev input:checked+label{border-color:var(--blue);background:var(--blue-soft);box-shadow:0 0 0 3px rgba(0,149,217,.12)}
+.viobox{border:2px solid #f0c9c4;background:#fdf3f1;border-radius:var(--r);padding:14px 16px;margin-top:14px}
+.viobox h4{margin:0 0 4px;color:var(--danger);font-size:16px}
+.viobox .sub{font-size:13.5px;color:#7d3f39;margin:0 0 10px}
+.viogrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:620px){.viogrid{grid-template-columns:1fr}}
+.viochk{display:flex;gap:9px;align-items:flex-start;border:1px solid #eccac4;background:#fff;border-radius:10px;padding:9px 11px;cursor:pointer}
+.viochk input{margin-top:3px;transform:scale(1.3)}
+.viochk .t{font-size:14.5px;font-weight:700;color:#992f27}
+.viochk .d{font-size:12.5px;color:#8a5650}
+.rowline{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
+.rowline .idx{flex:none;width:30px;height:46px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;color:var(--blue);font-size:17px}
+.rowline .grow{flex:1}
+.iconbtn{flex:none;border:1px solid var(--line);background:#fff;border-radius:9px;width:44px;height:44px;cursor:pointer;
+  font-size:19px;color:var(--sub)}
+.iconbtn:hover{border-color:var(--danger);color:var(--danger)}
+.addbtn{background:var(--blue-soft);color:var(--navy);border:1.5px dashed var(--blue);border-radius:10px;
+  padding:10px 16px;font-weight:700;cursor:pointer;font-size:15px}
+.addbtn:hover{background:#d8ecf8}
+.why{background:#fbfdff;border:1px solid var(--line);border-left:4px solid var(--blue);
+  border-radius:10px;padding:14px;margin:12px 0}
+.why .qn{font-weight:800;color:var(--navy);font-size:16.5px}
+.why .focus{font-size:13px;color:var(--sub);margin:3px 0 8px}
+.why .quote{background:#eef4f8;border-radius:8px;padding:7px 11px;font-size:13.5px;color:#28404f;margin-bottom:8px}
+.bonepick{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.bonepick .bp{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:14px;
+  cursor:pointer;color:#28333c}
+.bonepick .bp.on{color:#fff;border-color:transparent}
+.softnudge{background:var(--warn-soft);border:1px solid #f3d6ab;border-radius:10px;padding:10px 12px;font-size:14px;
+  color:#73420d;margin-top:9px}
+.softnudge b{color:#9c5510}
+.fishwrap{overflow-x:auto;background:#fbfdff;border:1px solid var(--line);border-radius:12px;padding:6px}
+.fishwrap svg{display:block;min-width:760px;width:100%;height:auto}
+.bonegroup{border:1px solid var(--line);border-radius:12px;padding:13px;margin:11px 0}
+.bonegroup h4{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px}
+.bonegroup h4 .dot{width:13px;height:13px;border-radius:50%}
+.bonegroup .pl{font-size:13px;color:var(--sub);font-weight:500}
+.bonegroup .prompt{font-size:13.5px;color:#42525c;margin:0 0 8px}
+.factor{display:flex;gap:8px;align-items:center;margin:6px 0}
+.factor .txt{flex:1;background:#f6fafd;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:15.5px}
+.factor .src{font-size:11.5px;color:#5a7078;flex:none}
+.emptybone{font-size:13.5px;color:#8a99a0;padding:4px 2px}
+.pickrow{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:11px;
+  padding:11px 13px;margin:8px 0;cursor:pointer;background:#fff}
+.pickrow.on{border-color:var(--blue);background:var(--blue-soft)}
+.pickrow input{margin-top:4px;transform:scale(1.35)}
+.pickrow .pl{flex:1;font-size:15.5px}
+.pickrow .tag{font-size:12px;color:#fff;border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:3px}
+.cm{border:1px solid var(--line);border-radius:12px;padding:14px;margin:13px 0}
+.cm .head{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.cm .head .cause{flex:1;font-size:13px;color:#2a3a44}
+.badge{font-size:13.5px;font-weight:800;border-radius:8px;padding:4px 11px;white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.mid{background:var(--warn-soft);color:#9c5510}
+.badge.bad{background:var(--danger-soft);color:var(--danger)}
+.smart{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:620px){.smart{grid-template-columns:1fr}}
+.smart .f label{font-size:14px;font-weight:800;color:var(--navy);display:block;margin-bottom:3px}
+.smart .f .q{font-size:12.5px;color:var(--sub);margin-bottom:3px}
+.rewrite{background:var(--blue-soft);border:1px solid #cfe8f6;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px}
+.rewrite .ttl{font-weight:700;color:var(--navy);margin-bottom:5px}
+.rewrite .one{display:flex;gap:8px;align-items:flex-start;margin:5px 0}
+.rewrite .one button{flex:none}
+.alertline{background:var(--danger-soft);border:1px solid #f3c3bf;border-radius:9px;padding:10px 13px;color:#8f231c;
+  font-size:14px;margin-top:9px}
+.praiseline{background:var(--ok-soft);border:1px solid #b6e0c6;border-radius:9px;padding:11px 14px;color:#1c6b3f;
+  font-size:14.5px;font-weight:700;margin-top:9px;animation:pop .32s ease}
+@keyframes pop{0%{transform:scale(.96);opacity:.2}60%{transform:scale(1.015)}100%{transform:scale(1);opacity:1}}
+.navbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:30;
+  box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+.navbar .in{max-width:920px;margin:0 auto;padding:12px 16px;display:flex;gap:10px;align-items:center}
+.btn{border:none;border-radius:12px;padding:13px 22px;font-size:16px;font-weight:800;cursor:pointer}
+.btn.prim{background:var(--blue);color:#fff}
+.btn.prim:hover{background:#0086c4}
+.btn.sec{background:#eef4f8;color:var(--navy)}
+.btn.sec:hover{background:#e0eef6}
+.btn.go{background:var(--ok);color:#fff}
+.btn.warn{background:var(--danger);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.navbar .spacer{flex:1}
+.gateMsg{font-size:13px;color:var(--warn);max-width:46%}
+.report{background:#fff;border:1px solid #000;padding:0;font-size:13.5px;color:#000}
+.report h3{text-align:center;margin:0;padding:8px;font-size:18px;border-bottom:2px solid #000;background:#f3f3f3}
+.report table{width:100%;border-collapse:collapse;table-layout:fixed}
+.report td,.report th{border:1px solid #000;padding:5px 7px;vertical-align:top;word-break:break-word}
+.report th{background:#eee;text-align:center;white-space:nowrap}
+.report .sec{background:#dfe9f0;font-weight:800;text-align:center;color:var(--navy)}
+.report .needfix{color:#c00;font-weight:800}
+.report ol{margin:3px 0 3px 22px;padding:0}
+.report ol li{margin:3px 0}
+.report .bk{font-size:11.5px;color:#333}
+.modal-back{position:fixed;inset:0;background:rgba(15,30,42,.5);z-index:50;display:flex;align-items:flex-start;
+  justify-content:center;padding:24px 14px;overflow:auto}
+.modal{background:#fff;border-radius:16px;max-width:860px;width:100%;padding:20px}
+.modal h3{margin:0 0 8px;color:var(--navy)}
+.caselist .ci{border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0;display:flex;gap:10px;align-items:center}
+.caselist .ci .g{flex:1}
+.caselist .ci .when{font-size:12.5px;color:var(--sub)}
+.tagmini{font-size:11.5px;border-radius:6px;padding:1px 7px;color:#fff;margin-left:6px}
+.note{font-size:13px;color:var(--sub)}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.pill{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:4px 11px;color:#2f4250}
+.bigwarn{background:#fdecea;border:2px solid var(--danger);border-radius:var(--r);padding:18px}
+.bigwarn h2{margin:0 0 6px;color:var(--danger);font-size:22px}
+.bigwarn .vlist{margin:10px 0;padding-left:20px}
+.bigwarn .vlist li{font-weight:700;color:#992f27;margin:3px 0}
+.routebox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}
+.routebox .step{display:flex;gap:10px;align-items:center;margin:7px 0}
+.routebox .step .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.contactchk{display:flex;gap:9px;align-items:center;margin-top:10px;cursor:pointer;background:#fff;border:1px solid #f3c3bf;border-radius:9px;padding:10px 12px}
+.contactchk input{transform:scale(1.35)}
+.contactchk .t{font-weight:800;color:var(--navy)}
+.directwarn{background:#fff;border:1.5px solid var(--danger);border-radius:9px;padding:10px 12px;margin-top:10px;color:#8f231c;font-size:14px;line-height:1.62}
+.directwarn .why-direct{display:block;margin-top:3px;color:#6b2b26;font-size:12.5px;font-weight:600}
+.pendwarn{background:var(--warn-soft);border:1px solid #f3d6ab;border-radius:8px;padding:8px 11px;margin-top:8px;color:#73420d;font-size:13.5px;font-weight:700}
+.modal .bigbtns{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+#print-area{display:none}
+@media print{
+  body{background:#fff}
+  .appbar,.navbar,main,#modal{display:none !important}
+  #print-area{display:block}
+  .report{border:none}
+  @page{size:A4;margin:12mm}
+}
+</style>
+<style id="pageStyle">
+/* 印刷直前に doPrint() が書類ごとに書き換える（縦A4/横A4・余白）。既定は従来どおり */
+@media print{ @page{size:A4;margin:12mm} }
+</style>
+<style id="formStyle">
+/* ============================================================
+   様式印刷用の新設クラス（担当 仕上げ版）
+   ・原本スキャン（様式原本）と突合済み
+   ・既存クラスは一切変更していない。追加のみ。
+   ・始末書：原本を正立させたところ「横書き・A4縦」と判明したため、
+     設計6章の保険条項を適用して横書きで組んでいる（要素順はCSSの
+     orderのみで原本どおりに並べ替え。HTML構造・JSは無変更）
+   ============================================================ */
+.fsheet{background:#fff;color:#000;line-height:1.5;font-size:11px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.fsheet table{width:100%;border-collapse:collapse;table-layout:fixed}
+.fsheet th,.fsheet td{border:1px solid #000;padding:.8mm 1.5mm;vertical-align:middle;word-break:break-word;background:#fff}
+.fsheet th{font-weight:700;text-align:center;font-size:9.5px;line-height:1.35}
+.fsheet td{font-weight:400;text-align:left}
+.fsheet .guide{display:block;font-size:8px;color:#000}
+.fsheet .guide-inline{font-size:8.5px;color:#000}
+.note-fine{font-size:8px;color:#000}
+.maru{display:inline-block;border:1.4px solid #000;border-radius:999px;padding:0 .35em;min-width:1.7em;text-align:center;line-height:1.5;box-sizing:border-box}
+.blankcell{display:inline-block;min-width:9em;border-bottom:1px solid #000;height:1.2em;vertical-align:bottom}
+.dotlines .dl{border-bottom:1px dotted #333;min-height:5.9mm;line-height:5.9mm;font-size:10px}
+.dotlines.small .dl{font-size:8.5px}
+.stampbox{display:inline-block;width:13mm;height:13mm;border:1px solid #000;margin-left:-1px;vertical-align:bottom;background:#fff}
+.vlabel{writing-mode:vertical-rl;text-align:center;font-weight:700;border:1px solid #000;margin-right:-1px;
+  padding:3mm 0;letter-spacing:.5em;flex:none;width:7mm;font-size:10.5px}
+/* --- 事故発生状況報告書（A4縦・余白10mm＝印字幅190mm） --- */
+.jokyo{width:190mm;font-size:10px}
+.jokyo .jokyo-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6mm;margin-bottom:1.6mm}
+.jokyo .jokyo-titlebox{flex:1;padding-top:1.5mm}
+.jokyo .jokyo-title{font-size:24px;font-weight:800;letter-spacing:.05em;line-height:1.15}
+.jokyo .jokyo-license{font-size:10px;font-weight:700;margin:1.2mm 0 0 3mm}
+.jokyo .jokyo-contact{width:78mm;flex:none}
+.jokyo .jokyo-contact th{white-space:nowrap;width:23%;font-size:8.5px;padding:.4mm;vertical-align:middle;line-height:1.25}
+.jokyo .jokyo-contact td{font-size:12px;font-weight:600;letter-spacing:.03em;text-align:center;height:5mm;padding:.3mm}
+.jokyo .jokyo-contact .cnote{width:30%;font-size:9.5px;font-weight:400}
+.jokyo .jokyo-block{display:flex;align-items:stretch;margin-top:1.6mm}
+.jokyo .jokyo-block>table{flex:1}
+.jokyo .jk th{padding:.8mm .5mm}
+.jokyo .jk td{font-size:10.5px;height:5.9mm}
+/* 縦帯ラベルの字間（原本は帯全体に文字が散らばる） */
+.jokyo>div:nth-child(2) .vlabel{letter-spacing:2.4em}  /* 自車・運転者 */
+.jokyo>div:nth-child(3) .vlabel{letter-spacing:2.9em}  /* 事故状況 */
+.jokyo>div:nth-child(4) .vlabel{letter-spacing:1.9em}  /* 相手情報 */
+.jokyo>div:nth-child(4) .jk td{height:6.8mm}           /* 相手情報の行は少し高く */
+.jokyo .kanaline{font-size:8px;border-bottom:1px dotted #777;min-height:3.4mm;line-height:1.3}
+.jokyo .nameline{min-height:5.4mm;font-size:11.5px;padding-top:.4mm}
+.jokyo td>div.note-fine{border-bottom:1px solid #000;text-align:center;margin:-.8mm -1.5mm .8mm;padding:.2mm 0;letter-spacing:.6em}
+.jokyo .birthval{display:block;text-align:center;min-height:4.8mm;font-size:10px;padding-top:.4mm}
+.jokyo .placeval{min-height:5.2mm;display:block;font-size:10.5px}
+.jokyo .meishou{border-top:1px solid #000;margin:.8mm -1.5mm -.8mm;padding:.4mm 1.5mm;min-height:4.8mm}
+.jokyo .situ-wrap{flex:1;border:1px solid #000;display:flex;flex-direction:column}
+.jokyo .situ-grid{display:flex;flex:1}
+.jokyo .situ-left{width:46%;border-right:1px solid #000;padding:1mm 2mm}
+.jokyo .situ-right{width:54%;padding:1mm 2mm;position:relative}
+.jokyo .situ-h{font-weight:700;text-align:center;font-size:10px;letter-spacing:.12em;margin-bottom:1mm}
+.jokyo .situ-sketch{height:45mm}
+.jokyo .nmark{position:absolute;top:6.5mm;right:2.5mm;width:5.4mm;height:5.4mm;border:1.5px solid #000;border-radius:50%;
+  line-height:5mm;text-align:center;font-size:8px;font-weight:700;float:none;box-sizing:border-box}
+.jokyo .jokyo-legend{border-top:1px solid #000;padding:1mm 2.5mm;font-size:10px}
+/* 自車・他車の矢印（原本の鉛筆型。黒塗り／白抜き。データURIのSVG＝外部読み込みなし） */
+.jokyo .ar-self,.jokyo .ar-other{display:inline-block;width:3.2mm;height:4.6mm;font-size:0;line-height:0;color:transparent;
+  overflow:hidden;vertical-align:-.6mm;background:center/100% 100% no-repeat}
+.jokyo .ar-self{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 15'%3E%3Cpath d='M5 0 L10 4.5 L10 15 L0 15 L0 4.5 Z' fill='black'/%3E%3C/svg%3E")}
+.jokyo .ar-other{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 15'%3E%3Cpath d='M5 .9 L9.4 4.9 L9.4 14.4 L.6 14.4 L.6 4.9 Z' fill='white' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E")}
+.jokyo .jokyo-police{margin-top:1.6mm}
+.jokyo .jokyo-police td{height:7mm;font-size:10.5px}
+.jokyo .jokyo-kairan{margin-top:1.8mm;text-align:right;padding-right:1mm}
+.jokyo .kairan-h{font-weight:700;margin-right:2mm;vertical-align:bottom;font-size:10.5px}
+.jokyo .kairan-route{font-size:9px;margin-top:1mm;letter-spacing:.02em}
+/* --- 始末書（A4縦・横書き。原本＝様式原本 準拠） --- */
+.shim{width:186mm;padding:4mm 6mm;font-family:"Yu Mincho","MS PMincho","Hiragino Mincho ProN",serif}
+.shim .shim-inner{display:flex;flex-direction:column;font-size:13px;line-height:2.0}
+.shim .shim-inner.small{font-size:11.5px}
+.shim .shim-inner>*{order:10}
+/* 原本の並び：日付（右上・手書き）→ 表題 → 宛先 → 本文 */
+.shim .shim-date{order:1;align-self:flex-end;width:42mm;height:6mm;margin:1mm 2mm 0 0}
+.shim .shim-title{order:2;text-align:center;font-size:19px;font-weight:600;letter-spacing:.4em;margin:1.5mm 0 3mm;padding:0}
+.shim .shim-to{order:3;margin:0 0 7mm 1mm;padding-left:1.6em;text-indent:-1.6em;font-weight:400;line-height:1.9}
+.shim .shim-body{order:4;margin:0 1mm 5mm;text-align:justify}
+.shim .shim-h{font-weight:500;margin:2mm 0 2mm 1mm;padding:0}
+.shim .dotlines{margin:0 2mm 4mm 8mm;padding:0 1mm;font-size:12px;line-height:5.9mm;border-left:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect x='0' y='5.2' width='1.6' height='.6' fill='%23555'/%3E%3C/svg%3E");
+  background-size:1.5mm 5.9mm}
+.shim .shim-naiyo{min-height:65mm}   /* 原本の点線 約13行ぶんの記入面 */
+.shim .shim-kaizen{min-height:53mm}  /* 原本の点線 約10行ぶんの記入面 */
+.shim .shim-inner.small .dotlines{font-size:10.5px}
+.shim .shim-sign{margin:6mm 4mm 2mm auto;width:122mm;padding:0}
+.shim .shim-line{margin:4mm 0;font-size:13px}
+.shim .blankcell.shim-blank{border-left:none;border-bottom:1px solid #000;min-width:0;width:88mm;height:1.3em;min-height:0}
+.shim .shim-stamp-space{display:inline-block;width:16mm;min-height:1em}
+/* --- 魚の骨単独シート（A4横・余白10mm＝印字幅277mm） --- */
+.fish{width:277mm;padding:0;font-size:10.5px}
+.fish .fish-head{display:flex;align-items:center;gap:4mm;margin-bottom:1.5mm}
+.fish .fish-title{font-size:15px;font-weight:800;white-space:nowrap}
+.fish .fish-meta{flex:1}
+.fish .fish-meta th{background:#eee;white-space:nowrap;width:8%;padding:.6mm}
+.fish .fish-meta td{height:6mm}
+.fish .fishslot{margin:1mm 0;border:1px solid #000}
+.fish .fishslot svg{display:block;height:130mm;width:auto;margin:0 auto}
+.fish .fish-cms th{background:#eee;padding:.6mm}
+.fish .fish-cms td{height:6.4mm;font-size:10px}
+.fish .fish-cms .no{text-align:center;font-weight:700}
+/* --- ステップ⑦プレビューの縮小表示（画面のみ。印刷には影響しない） --- */
+#prevbox{overflow-x:auto;padding-bottom:4px}
+#prevbox .fsheet{margin:0 auto;box-shadow:0 1px 8px rgba(16,32,43,.18);outline:1px solid #d8e1e8}
+#prevbox .fsheet.fish{zoom:.8}
+@media(max-width:900px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.8}#prevbox .fsheet.fish{zoom:.62}}
+@media(max-width:740px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.65}#prevbox .fsheet.fish{zoom:.5}}
+@media(max-width:620px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.52}#prevbox .fsheet.fish{zoom:.42}}
+@media(max-width:520px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.44}#prevbox .fsheet.fish{zoom:.36}}
+@media(max-width:440px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.38}#prevbox .fsheet.fish{zoom:.3}}
+@media(max-width:390px){#prevbox .fsheet.jokyo,#prevbox .fsheet.shim{zoom:.33}#prevbox .fsheet.fish{zoom:.27}}
+/* 印刷時は影・枠なしの素の様式 */
+@media print{
+  #print-area .fsheet{margin:0;box-shadow:none;outline:none}
+}
+</style>
+</head>
+<body>
+<div class="appbar">
+  <div class="row">
+    <div class="logo">事故ふりかえりナビ<small>フジ自動車工業｜再発させない仕組みづくり</small></div>
+    <div class="spacer"></div>
+    <button class="ghost" onclick="openCases()">過去の記録</button>
+    <button class="ghost" onclick="newCase()">新規</button>
+  </div>
+  <div class="prog" id="prog"></div>
+</div>
+
+<main id="main"></main>
+
+<div class="navbar" id="navbar">
+  <div class="in">
+    <button class="btn sec" id="backBtn" onclick="back()">もどる</button>
+    <div class="spacer"></div>
+    <div class="gateMsg" id="gateMsg"></div>
+    <button class="btn prim" id="nextBtn" onclick="next()">次へ ▶</button>
+  </div>
+</div>
+
+<div id="modal"></div>
+<div id="print-area"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   ★リース会社リスト：ここに普段使う会社を足せます（アプリ内の
+     「リストを編集」「＋会社を追加」でも、PC編集なしで増やせます）
+   ============================================================ */
+const DEFAULT_LEASE = [
+  "住友三井オートサービス",
+  "オリックス自動車",
+  "日本カーソリューションズ",
+  "三菱オートリース",
+  "トヨタモビリティサービス",
+  "コスモ・オートリース"
+];
+
+/* ============================================================
+   設計データ（例文はすべて“一般的に起こりうる事故”・人名は入れない）
+   ============================================================ */
+const BONES = [
+  {key:"driver", label:"人／運転者", plain:"運転していた人のこと", color:"#0095D9",
+   prompt:"その人の年齢・体調・慣れ・運転のクセに、原因はありませんでしたか？",
+   ex:["年齢が高く、とっさの判断が遅れた","左右や後ろの確認がしづらくなっていた","曲がる・避けるとき無意識に寄りすぎるクセがある","いつもの道で『大丈夫だろう』と油断した","運転経験が浅く車両感覚に不安があった"]},
+  {key:"vehicle", label:"車両・道具", plain:"乗っていた車・道具のこと", color:"#00a3b4",
+   prompt:"代車や普段と違う車で、大きさ・車幅・見え方の感覚にズレはありませんでしたか？",
+   ex:["代車・普段乗らない車で大きさの感覚がつかめなかった","車幅や左前のタイヤ位置が見えにくかった","ミラーの角度が自分用に合っていなかった","バックカメラ・センサーが無く死角が見えなかった","大きい車で内輪差が読めなかった"]},
+  {key:"road_env", label:"道路・環境", plain:"道や天気・まわりの様子のこと", color:"#5aa9e6",
+   prompt:"道幅・交差点の形・見通し・障害物・対向車・天候に原因はありませんでしたか？",
+   ex:["狭い道・狭い交差点で曲がる余裕がなかった","ガードレール・電柱・塀など障害物が近かった","対向車・歩行者・自転車の動きに気を取られた","夕方の西日・夜間・雨で視界が悪かった","駐車場で見通しが悪く出会い頭になった"]},
+  {key:"psych_time", label:"心理・時間のあせり", plain:"気持ちのあせり・時間の追われ方", color:"#e8821c",
+   prompt:"あせり・急ぎ・『大丈夫だろう』の油断や、時間に追われる事情はありませんでしたか？",
+   ex:["とっさのことで焦り、反射的にハンドルを切った","次の予定・約束の時間が迫って急いでいた","近道のつもりで慣れない狭い道を通った","『これくらい大丈夫』と油断していた"]},
+  {key:"rule_mgmt", label:"ルール・管理（会社の仕組み）", plain:"会社のきまり・段取り・教え方のこと", color:"#00467A",
+   prompt:"会社の仕組み側に原因は？ルート指示・代車の説明・高齢者配慮・時間の組み方・共有の有無は？",
+   ex:["危険な道を避ける推奨ルートが決まっていない","代車・不慣れな車を渡すときの説明・確認手順がない","高齢ドライバーや新人への配慮ルールがない","引取・納車・回送が詰まって余裕のない時間設定","過去のヒヤリハットが現場に共有されていない","バック・駐車時の誘導や声かけのルールがない"]}
+];
+const BONEMAP = Object.fromEntries(BONES.map(b=>[b.key,b]));
+
+const WHY_LEVELS = [
+  {q:"そのとき、まず何が起きましたか？ 見たこと・やったことを起きた順に書いてください。",
+   focus:"事実の確定。原因や反省はまだ書かない（例：交差点を曲がろうとした→対向車が来た→避けようと寄せた→何かに接触した）"},
+  {q:"その行動を、なぜそのとき選びましたか？ 頭の中で何を一番避けようとしましたか？",
+   focus:"行動→判断。『不注意』ではなく、その瞬間の“とっさの優先順位”を言葉にする（例：相手とぶつかるのが一番こわかった）"},
+  {q:"そのとき、車のまわりや車幅は見えていましたか？ 見えにくかったなら、それは何のせいですか？",
+   focus:"判断→条件・能力。意識ではなく『見えていたか／操作できたか』に落とす（例：不慣れな車で車両感覚がつかめていなかった）"},
+  {q:"そもそも、なぜその道を・その車で・その時間に通る（使う）ことになったのですか？ いつもこうですか？",
+   focus:"条件→習慣・段取り。一回限りでなく“繰り返し起きる土台”に踏み込む（例：近道だから毎回ここを通る／急いでいた）"},
+  {q:"会社の決め事として、これを防ぐ仕掛けはありましたか？ 何があれば防げましたか？",
+   focus:"習慣→仕組み・会社の責任。ルール・手順・教育・チェックという“枠”の不在に変換する（例：不慣れな車を渡すときの確認手順がない）"}
+];
+
+const BANNED = ["気をつける","気を付ける","気をつけて","注意する","注意して","注意を","徹底する","徹底させる","徹底","意識する","意識を高め","心がける","心掛け","気を引き締め","しっかり確認","しっかりする","しっかりやる","ちゃんとする","ちゃんとやる","油断しない","慎重に運転","安全運転を心がけ","再発防止に努め","努める","努力する","周知する","周知徹底","確認を徹底","声かけ","声掛け","気を抜かない","集中する","慌てない","落ち着いて運転","気を緩めない"];
+
+const SMART_FIELDS = [
+  {k:"who",   label:"誰が",            q:"役職・担当で。例：フロントの代車担当", ph:"例）フロントの代車担当"},
+  {k:"when",  label:"いつまでに／いつ", q:"期限やタイミング。例：今月末までに／代車を渡すたびに", ph:"例）今月末までに ／ 代車を渡すたびに"},
+  {k:"what",  label:"何を（具体的に）", q:"手順・モノ・ルールの形で。例：貸出チェックリストに車幅確認を追加", ph:"例）貸出チェックリストに『左前の車幅確認・構内一周試走』を追加して必須化"},
+  {k:"verify",label:"どう確認する",      q:"やったか確かめる方法。例：記入・押印し月次で実施率を確認", ph:"例）チェックリストに記入・保管し、月末に実施率を確認"}
+];
+
+const REWRITES = [
+  {weak:"その場所は通らず、安全な道を通る", strong:"配車担当が、危険な交差点・狭路をまとめた“危険箇所マップ”を作り、引取／納車の推奨ルートとして共有・ナビ登録する"},
+  {weak:"今度から一時停止する", strong:"フロント担当が、狭路での離合手順（対向車を先に行かせて待つ）をカードにして全ドライバーに配布・読み合わせ、車に常備する"},
+  {weak:"不慣れな車の運転は気をつける", strong:"代車担当が、貸出チェックリストに『左前の車幅位置を一緒に確認』『構内を一周試走』を追加し、運転者と一緒に実施して記録する"},
+  {weak:"ヒヤリハットへ登録して共有する", strong:"ヒヤリハット台帳に登録し、毎週の朝礼で1件読み上げる運用を始め、月末に登録件数を責任者が確認する"},
+  {weak:"高齢の運転者は注意する", strong:"管理者が、高齢ドライバーの繁忙時間帯の配車を見直すルールを作り、体調確認の声かけと無理のない時間配分を配車表に反映する"}
+];
+
+const SEV = {
+  minor: {t:"かすり傷・軽微", d:"小さな擦り傷など", icon:"🔧", minWhy:3},
+  damage:{t:"物損あり",       d:"車・物が壊れた",   icon:"🚗", minWhy:4},
+  injury:{t:"けが人あり",     d:"人がケガをした",   icon:"🚑", minWhy:5}
+};
+
+const VIOLATIONS = [
+  {key:"alcohol", t:"飲酒・酒気帯び運転", d:"お酒を飲んでの運転"},
+  {key:"nolicense", t:"無免許・免許失効・条件違反", d:"免許切れ・眼鏡条件無視など"},
+  {key:"hitrun", t:"ひき逃げ・当て逃げ", d:"救護せず・報告せず立ち去り"},
+  {key:"conceal", t:"事故の隠蔽・虚偽報告", d:"報告しない・嘘をつく"},
+  {key:"reckless", t:"故意・著しく無謀な運転", d:"あおり運転・信号無視常習・暴走など"},
+  {key:"drug", t:"薬物・危険ドラッグ使用", d:"薬物の影響下での運転"},
+  {key:"fraud", t:"保険金不正・事故偽装", d:"事故を装う等の不正・背信"}
+];
+const VIOMAP = Object.fromEntries(VIOLATIONS.map(v=>[v.key,v]));
+
+const ACC_TYPES = [
+  {key:"self",  t:"自損事故（相手なし）"},
+  {key:"other", t:"相手のある事故"}
+];
+const ACCMAP = Object.fromEntries(ACC_TYPES.map(a=>[a.key,a]));
+const VCLASS = [
+  {key:"lease",  t:"リースユーザーの車（リース会社の委託車両）", report:true},
+  {key:"corp",   t:"一般法人のお客様の車", report:false},
+  {key:"indiv",  t:"一般個人のお客様の車", report:false},
+  {key:"loaner", t:"当社の代車", report:false},
+  {key:"own",    t:"当社の自社車", report:false}
+];
+const VCLASSMAP = Object.fromEntries(VCLASS.map(v=>[v.key,v]));
+
+const PLACE_EX   = ["交差点付近","見通しの悪い交差点","駐車場内","コンビニ等の駐車場","店舗・工場の構内","狭い住宅街の道","幹線道路","お客様宅の前"];
+const NUMBER_AREA = ["名古屋","三河","岡崎","豊田","尾張小牧","一宮","春日井"];
+const AGE_EX = ["20代","30代","40代","50代","60代","70歳以上"];
+const DEPT_EX = ["本社","三好","中央","一宮","フロント","整備","板金","フォークリフト","営業","事務"];
+const TIMELINE_EX = [
+  "交差点を右折・左折しようとした",
+  "狭い道で対向車とすれ違おうとした",
+  "バックで駐車・方向転換しようとした",
+  "前の車が急に止まった",
+  "歩行者・自転車に気づくのが遅れた",
+  "車を左（右）に寄せた",
+  "縁石・ガードレール・ポールに接触した",
+  "相手の車・壁・障害物に接触した"
+];
+const DAMAGE_PART = ["フロントバンパー","リアバンパー","左前フェンダー","右前フェンダー","左ドア","右ドア","左クォーター","右クォーター","ボンネット","ドアミラー","ホイール・タイヤ","トランク・バックドア"];
+const DAMAGE_KIND = ["擦り傷","小さなへこみ","大きなへこみ","割れ・破損","塗装はがれ"];
+const OTHER_EX = ["相手にケガなし","相手にケガあり（救急要請）","物損のみ","相手の連絡先を聞いた","相手の車：","相手の保険会社："];
+/* 相手あり時の構造化9欄（事故発生状況報告書の相手情報ブロックに印字） */
+const OP_FIELDS = [
+  {k:"opCompany",       t:"会社名・勤務先名"},
+  {k:"opDriver",        t:"相手運転者名"},
+  {k:"opContact",       t:"連絡先（自宅・携帯）"},
+  {k:"opRegno",         t:"登録番号"},
+  {k:"opCarName",       t:"車名"},
+  {k:"opDamage",        t:"損害箇所"},
+  {k:"opRepair",        t:"入庫予定修理工場"},
+  {k:"opInsurer",       t:"相手保険会社"},
+  {k:"opInsurerContact",t:"保険会社の連絡先・担当"}
+];
+
+const STEP_TITLES = [
+  {n:0,t:"はじめに",            s:"これは“誰のせいか”を決める紙ではありません"},
+  {n:1,t:"いつ・どこで・だれが", s:"わかっている事実をうめます"},
+  {n:2,t:"何が起きたか",        s:"起きた順番に思い出します"},
+  {n:3,t:"なぜ？を一緒に掘る",   s:"事象で止めず、仕組みまで掘ります"},
+  {n:4,t:"魚の骨で整理",        s:"原因を5つの骨に振り分けます"},
+  {n:5,t:"本当の原因はどれ？",   s:"いちばん効く根っこを選びます"},
+  {n:6,t:"再発防止策",          s:"誰が・いつ・何を・どう確認"},
+  {n:7,t:"確認して提出",        s:"報告書の形にして印刷・保存"}
+];
+const LAST = 7;
+
+/* ============================================================
+   状態
+   ============================================================ */
+const LS_DRAFT="jiko_furikaeri_draft_v2";
+const LS_CASES="jiko_furikaeri_cases_v2";
+const LS_LEASE="jiko_furikaeri_lease_v1";
+let step = 0;
+let view = "wizard";
+let uid = 1;
+function nid(){ return "f"+(uid++); }
+function makeWhy(){ return {id:nid(), answer:"", bone:""}; }
+function blankState(){
+  return {
+    id:null, createdAt:"",
+    severity:"",
+    violations:[],
+    facts:{datetime:"",place:"",driver:"",reporter:"",vehicle:"",weather:"",road:"",receiver:"",accType:"",vClass:"",leaseCo:"",leaseContact:"",leaseContacted:false,otherParty:"",
+      /* 様式印字用の追加キー（設計 3.1） */
+      driverKana:"",driverSex:"",vin:"",repairShop:"",police:"",insPref:"",author:"",isFL:false,flKanri:"",flBan:"",
+      opCompany:"",opDriver:"",opContact:"",opRegno:"",opCarName:"",opDamage:"",opRepair:"",opInsurer:"",opInsurerContact:""},
+    timeline:[""],
+    damage:"",
+    whys:[ makeWhy() ],
+    factors:[],
+    roots:[],
+    rootReason:{},
+    cms:[],
+    members:""
+  };
+}
+let S = blankState();
+
+/* 保存しないもの（決定事項①）。persist()は{step,view,uid,S}しか書かず、
+   saveCase()はSの深いコピーしか台帳に入れないため、Sの外のここに置く限り
+   下書き（draft）にも台帳（cases）にも構造上入らない。 */
+let PRINT_ONLY = { birth: "" };   // 生年月日（印刷直前入力・非保存）
+let printDoc = "report";          // 印刷する書類の選択状態（非保存・毎回既定に戻る）
+
+function persist(){ try{ localStorage.setItem(LS_DRAFT, JSON.stringify({step,view,uid,S})); }catch(e){} }
+function restore(){
+  try{
+    const r = JSON.parse(localStorage.getItem(LS_DRAFT)||"null");
+    if(r&&r.S){ S=r.S; step=r.step||0; view=r.view||"wizard"; uid=r.uid||50; ensureShape(); return true; }
+  }catch(e){}
+  return false;
+}
+function ensureShape(){
+  if(!S.facts) S.facts={};
+  ["datetime","place","driver","reporter","vehicle","weather","road","receiver","accType","vClass","leaseCo","leaseContact","otherParty",
+   "driverKana","driverSex","vin","repairShop","police","insPref","author","flKanri","flBan",
+   "opCompany","opDriver","opContact","opRegno","opCarName","opDamage","opRepair","opInsurer","opInsurerContact"]
+    .forEach(k=>{ if(typeof S.facts[k]!=="string") S.facts[k]=""; });
+  if(typeof S.facts.leaseContacted!=="boolean") S.facts.leaseContacted=false;
+  if(typeof S.facts.isFL!=="boolean") S.facts.isFL=false;
+  if(!Array.isArray(S.violations)) S.violations=[];
+  if(!Array.isArray(S.whys)||!S.whys.length) S.whys=[makeWhy()];
+  S.whys.forEach(w=>{ if(!w.id) w.id=nid(); });
+  if(!Array.isArray(S.timeline)||!S.timeline.length) S.timeline=[""];
+  if(!Array.isArray(S.factors)) S.factors=[];
+  if(!Array.isArray(S.roots)) S.roots=[];
+  if(!S.rootReason||typeof S.rootReason!=="object") S.rootReason={};
+  if(!Array.isArray(S.cms)) S.cms=[];
+}
+function maxIdNum(s){
+  let m=0; const scan=v=>{ if(typeof v==="string"){ const mm=/^f(\d+)$/.exec(v); if(mm)m=Math.max(m,+mm[1]); } };
+  (s.whys||[]).forEach(w=>scan(w.id));
+  (s.factors||[]).forEach(f=>scan(f.id));
+  (s.cms||[]).forEach(c=>scan(c.id));
+  return m;
+}
+
+function userLease(){ try{ return JSON.parse(localStorage.getItem(LS_LEASE)||"[]"); }catch(e){ return []; } }
+function leaseList(){ const all=DEFAULT_LEASE.concat(userLease()); return all.filter((x,i)=>all.indexOf(x)===i); }
+function addLease(n){ n=(n||"").trim(); if(!n||DEFAULT_LEASE.includes(n))return; const u=userLease(); if(!u.includes(n)){ u.push(n); localStorage.setItem(LS_LEASE,JSON.stringify(u)); } }
+function removeLease(n){ localStorage.setItem(LS_LEASE,JSON.stringify(userLease().filter(x=>x!==n))); }
+
+function fmtDateTime(v){
+  if(!v) return "";
+  const m=/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/.exec(v);
+  if(!m) return v;
+  let s=`${+m[1]}年${+m[2]}月${+m[3]}日`;
+  if(m[4]) s+=` ${m[4]}:${m[5]}`;
+  return s;
+}
+
+/* ============================================================
+   要因プール
+   ============================================================ */
+function factorPool(){
+  const out=[];
+  S.whys.forEach(w=>{ if(w.answer&&w.answer.trim()&&w.bone) out.push({ref:w.id,bone:w.bone,text:w.answer.trim(),src:"なぜなぜ"}); });
+  S.factors.forEach(f=>{ if(f.text&&f.text.trim()) out.push({ref:f.id,bone:f.bone,text:f.text.trim(),src:"追加"}); });
+  return out;
+}
+function factorByRef(ref){ return factorPool().find(f=>f.ref===ref); }
+
+/* ============================================================
+   精神論／SMART 採点
+   ============================================================ */
+function hitBanned(text){
+  if(!text) return null;
+  const t=text.replace(/\s/g,"");
+  for(const b of BANNED){ if(t.includes(b.replace(/\s/g,""))) return b; }
+  return null;
+}
+function smartFilled(cm){ return SMART_FIELDS.filter(f=> (cm[f.k]||"").trim().length>=2 ).length; }
+function scoreCM(cm){
+  const filled=smartFilled(cm);
+  const banned=hitBanned([cm.what,cm.who,cm.when,cm.verify].join(" "));
+  if(filled>=3) return {lv:"ok", label:"具体的", banned, filled};
+  if(banned && filled<3) return {lv:"bad", label:"精神論ぎみ", banned, filled};
+  return {lv:"mid", label:"あと一歩", banned, filled};
+}
+
+/* ============================================================
+   レンダリング基盤
+   ============================================================ */
+const main=document.getElementById("main");
+function el(html){ const d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstElementChild; }
+function esc(s){ return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+function renderProg(){
+  const p=document.getElementById("prog"); p.innerHTML="";
+  for(let i=0;i<=LAST;i++){ const seg=document.createElement("div"); seg.className="seg"+(i<step?" done":i===step?" cur":""); p.appendChild(seg); }
+}
+function header(n){ const t=STEP_TITLES[n]; return `<div class="steptitle"><div class="num">${n}</div><div><h2>${t.t}</h2><p>${t.s}</p></div></div>`; }
+
+function render(){
+  const nav=document.getElementById("navbar");
+  if(view==="violation"){ nav.style.display="none"; renderProg(); main.innerHTML=""; renderViolation(); window.scrollTo(0,0); persist(); return; }
+  nav.style.display="";
+  renderProg();
+  main.innerHTML="";
+  main.appendChild(el(`<div>${header(step)}</div>`));
+  [stepIntro,stepFacts,stepTimeline,stepWhy,stepFish,stepRoot,stepCM,stepReport][step]();
+  updateNav();
+  window.scrollTo(0,0);
+  persist();
+}
+
+/* ---------- Step0 ---------- */
+function stepIntro(){
+  const c=el(`<div>
+    <div class="lead">
+      この用紙は <b>「誰のせいか」を決める紙ではありません</b>。<br>
+      <b>次に同じ事故を起こさない“仕組み”を全員で作る</b> ための紙です。順番に答えるだけで、約10〜15分で報告書が完成します。
+    </div>
+    <div class="card">
+      <div class="field"><label>事故の重さを選んでください</label>
+      <div class="hint">あとで深掘りの段数や報告先の目安に使います。迷ったら重い方を選んでください。</div>
+      <div class="sev" id="sevbox"></div></div>
+      <div class="viobox">
+        <h4>⚠ 重大な違反はありましたか？（あった項目だけチェック）</h4>
+        <p class="sub">これは“結果の重さ”ではなく“行為”の確認です。ここに当てはまると、通常の再発防止フローではなく <b>経営判断・場合により警察対応の別ライン</b> に進みます（このアプリは処分を決めません）。</p>
+        <div class="viogrid" id="viogrid"></div>
+      </div>
+    </div>
+  </div>`);
+  main.appendChild(c);
+  const box=c.querySelector("#sevbox");
+  Object.entries(SEV).forEach(([k,v])=>{
+    const id="sev_"+k;
+    const w=el(`<div><input type="radio" name="sev" id="${id}" ${S.severity===k?"checked":""}>
+      <label for="${id}"><div class="big">${v.icon}</div><div class="t">${v.t}</div><div class="d">${v.d}</div></label></div>`);
+    w.querySelector("input").addEventListener("change",()=>{ S.severity=k; persist(); updateNav(); });
+    box.appendChild(w);
+  });
+  const vg=c.querySelector("#viogrid");
+  VIOLATIONS.forEach(v=>{
+    const on=S.violations.includes(v.key);
+    const row=el(`<label class="viochk"><input type="checkbox" ${on?"checked":""}>
+      <div><div class="t">${esc(v.t)}</div><div class="d">${esc(v.d)}</div></div></label>`);
+    row.querySelector("input").addEventListener("change",e=>{
+      if(e.target.checked){ if(!S.violations.includes(v.key))S.violations.push(v.key); }
+      else S.violations=S.violations.filter(x=>x!==v.key);
+      persist(); updateNav();
+    });
+    vg.appendChild(row);
+  });
+}
+
+/* ---------- Step1 事実（入力をできるだけ減らす） ---------- */
+function factField(label,hint,key,exs){
+  const f=el(`<div class="field"><label>${label}</label>${hint?`<div class="hint">${hint}</div>`:""}</div>`);
+  const inp=el(`<input type="text" value="${esc(S.facts[key]||"")}">`);
+  inp.addEventListener("input",()=>{ S.facts[key]=inp.value; persist(); updateNav(); });
+  f.appendChild(inp);
+  if(exs&&exs.length){
+    const ch=el(`<div class="chips"></div>`);
+    exs.forEach(x=>{ const cc=el(`<span class="chip ex">${esc(x)}</span>`); cc.onclick=()=>{ inp.value=x; S.facts[key]=x; persist(); updateNav(); }; ch.appendChild(cc); });
+    f.appendChild(ch);
+  }
+  return f;
+}
+function dateTimeField(){
+  const f=el(`<div class="field"><label>発生日時</label><div class="hint">カレンダーから日付と時刻を選べます（手入力なし）</div></div>`);
+  const inp=el(`<input type="datetime-local" value="${esc(S.facts.datetime||"")}">`);
+  inp.addEventListener("input",()=>{ S.facts.datetime=inp.value; persist(); updateNav(); });
+  f.appendChild(inp);
+  return f;
+}
+function appendField(label,hint,key,groups){
+  const f=el(`<div class="field"><label>${label}</label>${hint?`<div class="hint">${hint}</div>`:""}</div>`);
+  const inp=el(`<input type="text" value="${esc(S.facts[key]||"")}">`);
+  inp.addEventListener("input",()=>{ S.facts[key]=inp.value; persist(); updateNav(); });
+  f.appendChild(inp);
+  const ch=el(`<div class="chips"></div>`);
+  const add=x=>{ const cur=inp.value.trim(); inp.value=(cur?cur+" ":"")+x; S.facts[key]=inp.value; persist(); updateNav(); inp.focus(); };
+  groups.forEach(grp=>{ grp.items.forEach(x=>{ const cc=el(`<span class="chip${grp.dashed?" ex":""}">${grp.dashed?"＋ ":""}${esc(x)}</span>`); cc.onclick=()=>add(x); ch.appendChild(cc); }); });
+  f.appendChild(ch);
+  return f;
+}
+function receiverField(){
+  const f=el(`<div class="field"><label>受付者</label><div class="hint">最初に報告を受けた人。報告者と同じなら下のボタン</div></div>`);
+  const inp=el(`<input type="text" value="${esc(S.facts.receiver||"")}">`);
+  inp.addEventListener("input",()=>{ S.facts.receiver=inp.value; persist(); updateNav(); });
+  f.appendChild(inp);
+  const ch=el(`<div class="chips"></div>`);
+  const same=el(`<span class="chip ex">報告者と同じにする</span>`);
+  same.onclick=()=>{ inp.value=S.facts.reporter||""; S.facts.receiver=inp.value; persist(); updateNav(); };
+  ch.appendChild(same);
+  f.appendChild(ch);
+  return f;
+}
+function stepFacts(){
+  const c=el(`<div class="card"></div>`);
+  const g=(a,b)=>{ const r=el(`<div class="two"></div>`); r.appendChild(a); r.appendChild(b); return r; };
+  c.appendChild(g(dateTimeField(),
+                  factField("発生場所","どこで起きたか（候補から選んで直してもOK）","place",PLACE_EX)));
+  c.appendChild(g(appendField("運転していた人（お名前・年齢）","お名前を入れ、年齢は下のボタンで足せます（年齢は深掘りに使います）","driver",
+                    [{dashed:true,items:AGE_EX}]),
+                  appendField("報告者・部署","下のボタンで部署を足せます。お名前も入れてください","reporter",
+                    [{dashed:true,items:DEPT_EX}])));
+  c.appendChild(g(appendField("車両（車種・ナンバー）","下の候補はタップで足せます（名古屋・三河など）","vehicle",
+                    [{dashed:true,items:["代車","自社の車","お客様の車","引取・回送の車"]},{dashed:false,items:NUMBER_AREA}]),
+                  receiverField()));
+  c.appendChild(g(factField("天候","晴れ／曇り／雨／雪 など","weather",["晴れ","曇り","雨","雪"]),
+                  factField("路面","乾燥／ウェット／凍結 など","road",["乾燥","ウェット","凍結"])));
+  /* ▼ 様式印字用の追加欄（設計 2.1。すべて任意入力＝ゲートに含めない） */
+  c.appendChild(g(factField("フリガナ","状況報告書に印字します。カタカナで","driverKana",null),
+                  sexField()));
+  c.appendChild(g(factField("車体番号","","vin",null),
+                  factField("入庫予定修理工場（自車）","","repairShop",null)));
+  c.appendChild(g(factField("警察届出（署・交番名）","届け出た警察署・交番名。届け出ていなければ空欄のまま","police",null),
+                  authorField()));
+  c.appendChild(insPrefField());
+  main.appendChild(c);
+  main.appendChild(buildClassCard());
+}
+/* 性別：チップ2択（男／女。再タップで解除） */
+function sexField(){
+  const f=el(`<div class="field"><label>性別</label><div class="chips"></div></div>`);
+  const box=f.querySelector(".chips"), OPTS=["男","女"];
+  const sync=()=>{ box.querySelectorAll(".chip").forEach((ch,i)=>setChip(ch,S.facts.driverSex===OPTS[i])); };
+  OPTS.forEach(v=>{
+    const ch=el(`<span class="chip">${v}</span>`);
+    ch.onclick=()=>{ S.facts.driverSex=(S.facts.driverSex===v?"":v); persist(); sync(); };
+    box.appendChild(ch);
+  });
+  sync();
+  return f;
+}
+/* 報告書作成者（receiverField()と同じ「報告者と同じにする」チップ付き） */
+function authorField(){
+  const f=el(`<div class="field"><label>報告書作成者</label></div>`);
+  const inp=el(`<input type="text" value="${esc(S.facts.author||"")}">`);
+  inp.addEventListener("input",()=>{ S.facts.author=inp.value; persist(); });
+  f.appendChild(inp);
+  const ch=el(`<div class="chips"></div>`);
+  const same=el(`<span class="chip ex">報告者と同じにする</span>`);
+  same.onclick=()=>{ inp.value=S.facts.reporter||""; S.facts.author=inp.value; persist(); };
+  ch.appendChild(same);
+  f.appendChild(ch);
+  return f;
+}
+/* 労災優先・自賠責優先：チップ3択（労災優先／自賠責優先／選択しない） */
+function insPrefField(){
+  const f=el(`<div class="field"><label>労災優先・自賠責優先</label><div class="chips"></div></div>`);
+  const box=f.querySelector(".chips");
+  const OPTS=[{v:"rousai",t:"労災優先"},{v:"jibai",t:"自賠責優先"},{v:"",t:"選択しない"}];
+  const sync=()=>{ box.querySelectorAll(".chip").forEach((ch,i)=>setChip(ch,S.facts.insPref===OPTS[i].v)); };
+  OPTS.forEach(o=>{
+    const ch=el(`<span class="chip">${o.t}</span>`);
+    ch.onclick=()=>{ S.facts.insPref=o.v; persist(); sync(); };
+    box.appendChild(ch);
+  });
+  sync();
+  return f;
+}
+
+/* 事故の区分 */
+function buildClassCard(){
+  const card=el(`<div class="card">
+    <div class="field"><label>① どんな事故ですか？</label>
+      <div class="hint">相手のある事故は、相手対応・保険も変わります。</div>
+      <div class="chips" id="accbox"></div></div>
+    <div class="field"><label>② ぶつけた車は、どの車ですか？</label>
+      <div class="hint">リースユーザーの車は、リース会社への事故報告が必要になります。</div>
+      <div class="chips" id="vclbox"></div></div>
+    <div id="leaseslot"></div>
+    <div id="otherslot"></div>
+    <div class="field" style="margin-bottom:0"><label style="display:flex;gap:9px;align-items:center;cursor:pointer">
+      <input type="checkbox" id="flchk" style="transform:scale(1.3)">フォークリフトの事故</label></div>
+    <div id="flslot"></div>
+  </div>`);
+  const accbox=card.querySelector("#accbox");
+  ACC_TYPES.forEach(a=>{ const ch=el(`<span class="chip">${esc(a.t)}</span>`); setChip(ch,S.facts.accType===a.key);
+    ch.onclick=()=>{ S.facts.accType=a.key; persist(); refreshClass(card); updateNav(); }; accbox.appendChild(ch); });
+  const vclbox=card.querySelector("#vclbox");
+  VCLASS.forEach(v=>{ const ch=el(`<span class="chip">${esc(v.t)}</span>`); setChip(ch,S.facts.vClass===v.key);
+    ch.onclick=()=>{ S.facts.vClass=v.key; persist(); refreshClass(card); updateNav(); }; vclbox.appendChild(ch); });
+  refreshClass(card);
+  /* フォークリフトの事故 → ONで管理番号・F番の2欄を表示（設計 2.1） */
+  const flchk=card.querySelector("#flchk");
+  flchk.checked=!!S.facts.isFL;
+  flchk.addEventListener("change",()=>{ S.facts.isFL=flchk.checked; persist(); refreshFLSlot(card); });
+  refreshFLSlot(card);
+  return card;
+}
+function refreshFLSlot(card){
+  const s=card.querySelector("#flslot"); if(!s) return; s.innerHTML="";
+  if(!S.facts.isFL) return;
+  const r=el(`<div class="two"></div>`);
+  r.appendChild(factField("管理番号","","flKanri",null));
+  r.appendChild(factField("F番","","flBan",null));
+  s.appendChild(r);
+}
+function setChip(ch,on){ if(on)ch.classList.add("on"); else ch.classList.remove("on"); }
+function refreshClass(card){
+  card.querySelectorAll("#accbox .chip").forEach((ch,i)=>setChip(ch,S.facts.accType===ACC_TYPES[i].key));
+  card.querySelectorAll("#vclbox .chip").forEach((ch,i)=>setChip(ch,S.facts.vClass===VCLASS[i].key));
+  const ls=card.querySelector("#leaseslot"); ls.innerHTML="";
+  if(S.facts.vClass==="lease"){
+    const list=leaseList(), cur=S.facts.leaseCo||"", inList=list.includes(cur);
+    let opts=`<option value="">― リース会社を選んでください ―</option>`;
+    list.forEach(n=>{ opts+=`<option value="${esc(n)}" ${cur===n?"selected":""}>${esc(n)}</option>`; });
+    opts+=`<option value="__other__" ${(cur&&!inList)?"selected":""}>その他（直接入力）</option>`;
+    const box=el(`<div class="alertline" style="font-size:15px">
+      ⚠ <b>リースユーザー車の事故です。</b> リース会社への事故報告が必要です。報告先を選んでください。
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="leasesel" style="flex:1;min-width:200px">${opts}</select>
+        <button class="addbtn" id="leaseadd" style="padding:9px 13px">＋ 会社を追加</button>
+        <button class="chip" id="leaseedit">リストを編集</button>
+      </div>
+      <div id="leaseother" style="margin-top:8px;${(cur&&!inList)?"":"display:none"}">
+        <input type="text" id="leasetext" placeholder="リース会社名を入力" value="${(cur&&!inList)?esc(cur):""}">
+      </div>
+      <div style="margin-top:10px">
+        <label style="font-weight:800;color:var(--navy);display:block;margin-bottom:4px;font-size:14.5px">いつもの担当者名（必ずこの方に直接）</label>
+        <input type="text" id="leasecontact" placeholder="例）○○さん" value="${esc(S.facts.leaseContact||"")}">
+      </div>
+      <div class="directwarn">☎ <b>連絡は必ず担当者ご本人に。</b> 不在でも <b>ほかの方への伝言・言付けはしないでください。</b> 本人と話せるまで“連絡待ち”にしてください。
+        <span class="why-direct">いつもやり取りしている担当者だからこそ、その方の判断で穏便に収めてくれることがあります。だから必ず本人に。</span></div>
+      <label class="contactchk"><input type="checkbox" id="leasecontacted" ${S.facts.leaseContacted?"checked":""}>
+        <span class="t">担当者ご本人に「直接」連絡できた</span></label>
+      <div id="leasepending" style="${S.facts.leaseContacted?"display:none":""}">
+        <div class="pendwarn">⏳ まだ本人に直接つながっていません。伝言は残さず、本人と話せたら上にチェックしてください。</div>
+      </div></div>`);
+    const sel=box.querySelector("#leasesel"), other=box.querySelector("#leaseother"), oi=box.querySelector("#leasetext");
+    sel.addEventListener("change",()=>{
+      if(sel.value==="__other__"){ other.style.display=""; S.facts.leaseCo=oi.value.trim(); oi.focus(); }
+      else { other.style.display="none"; S.facts.leaseCo=sel.value; }
+      persist();
+    });
+    oi.addEventListener("input",()=>{ S.facts.leaseCo=oi.value.trim(); persist(); });
+    box.querySelector("#leaseadd").onclick=()=>{ const n=prompt("追加するリース会社名を入力してください"); if(n&&n.trim()){ addLease(n.trim()); S.facts.leaseCo=n.trim(); refreshClass(card); } };
+    box.querySelector("#leaseedit").onclick=()=>openLeaseEditor(()=>refreshClass(card));
+    box.querySelector("#leasecontact").addEventListener("input",e=>{ S.facts.leaseContact=e.target.value; persist(); });
+    box.querySelector("#leasecontacted").addEventListener("change",e=>{ S.facts.leaseContacted=e.target.checked; persist(); const p=box.querySelector("#leasepending"); if(p)p.style.display=e.target.checked?"none":""; });
+    ls.appendChild(box);
+  } else if(S.facts.leaseCo){ S.facts.leaseCo=""; }
+  const os=card.querySelector("#otherslot"); os.innerHTML="";
+  if(S.facts.accType==="other"){
+    const box=el(`<div>
+      <div class="field" style="margin-bottom:4px"><label>相手の情報（事故発生状況報告書に印字されます）</label>
+        <div class="hint">分かる範囲で。空欄のままでも印刷できます。</div></div>
+      <div class="two" id="opgrid"></div>
+      <div class="field"><label>そのほかのメモ</label>
+        <div class="hint">下のボタンで足せます。相手の車・連絡先・保険会社など。</div>
+        <textarea id="otherp" placeholder="例）相手：白の軽自動車／連絡先／加入保険">${esc(S.facts.otherParty||"")}</textarea>
+        <div class="chips" id="otherex"></div></div>
+    </div>`);
+    const grid=box.querySelector("#opgrid");
+    OP_FIELDS.forEach(o=>{
+      const w=el(`<div class="field"><label style="font-size:15px">${o.t}</label></div>`);
+      const inp=el(`<input type="text" value="${esc(S.facts[o.k]||"")}">`);
+      inp.addEventListener("input",()=>{ S.facts[o.k]=inp.value; persist(); });
+      w.appendChild(inp); grid.appendChild(w);
+    });
+    const otp=box.querySelector("#otherp");
+    otp.addEventListener("input",e=>{ S.facts.otherParty=e.target.value; persist(); });
+    const oex=box.querySelector("#otherex");
+    OTHER_EX.forEach(x=>{ const cc=el(`<span class="chip ex">＋ ${esc(x)}</span>`); cc.onclick=()=>{ const cur=(S.facts.otherParty||"").trim(); S.facts.otherParty=(cur?cur+" ":"")+x; otp.value=S.facts.otherParty; persist(); }; oex.appendChild(cc); });
+    os.appendChild(box);
+  } else {
+    /* 自損に戻したら相手系の値はクリア（設計 2.2） */
+    let cleared=false;
+    if(S.facts.otherParty){ S.facts.otherParty=""; cleared=true; }
+    OP_FIELDS.forEach(o=>{ if(S.facts[o.k]){ S.facts[o.k]=""; cleared=true; } });
+    if(cleared) persist();
+  }
+}
+function openLeaseEditor(onClose){
+  window.__leaseOnClose=onClose||null;
+  const m=document.getElementById("modal");
+  let rows="";
+  DEFAULT_LEASE.forEach(n=>{ rows+=`<div class="ci"><div class="g">${esc(n)} <span class="note">（標準）</span></div></div>`; });
+  userLease().forEach(n=>{ rows+=`<div class="ci"><div class="g">${esc(n)}</div><button class="iconbtn" title="削除" onclick="__delLease(this.getAttribute('data-n'))" data-n="${esc(n)}">🗑</button></div>`; });
+  m.innerHTML=`<div class="modal-back" onclick="if(event.target===this)closeLeaseEditor()"><div class="modal">
+    <h3>リース会社リストの編集</h3>
+    <div class="note">標準の会社は消せません。よく使う会社を追加してください（この端末に保存されます）。</div>
+    <div class="caselist" style="margin-top:8px">${rows||'<div class="note">（追加した会社はまだありません）</div>'}</div>
+    <div style="display:flex;gap:8px;margin-top:10px"><input type="text" id="newlease" placeholder="追加する会社名"><button class="btn prim" onclick="__addLease()">追加</button></div>
+    <div style="text-align:right;margin-top:10px"><button class="btn sec" onclick="closeLeaseEditor()">閉じる</button></div>
+  </div></div>`;
+}
+function closeLeaseEditor(){ document.getElementById("modal").innerHTML=""; if(window.__leaseOnClose)window.__leaseOnClose(); window.__leaseOnClose=null; }
+
+/* ---------- Step2 時系列 ---------- */
+function stepTimeline(){
+  const c=el(`<div class="card">
+    <div class="field"><label>起きたことを“起きた順”に書いてください</label>
+    <div class="hint">1行に1つずつ。短くて大丈夫です。下の候補はタップで足せます（あとで言葉は直せます）。</div>
+    <div id="tl"></div>
+    <button class="addbtn" id="addtl">＋ 行を追加</button>
+    <div class="chips" id="tlex"></div></div>
+    <div class="field"><label>被害の状況（どこが・どうなったか）</label>
+    <div class="hint">下のボタンで「場所」と「状態」を足せます。例：左ドア 擦り傷</div>
+    <textarea id="dmg">${esc(S.damage)}</textarea>
+    <div class="chips" id="dmgpart"></div>
+    <div class="chips" id="dmgkind"></div></div>
+  </div>`);
+  main.appendChild(c);
+  const tl=c.querySelector("#tl");
+  function draw(){
+    tl.innerHTML="";
+    S.timeline.forEach((v,i)=>{
+      const r=el(`<div class="rowline"><div class="idx">${i+1}</div>
+        <input class="grow" type="text" value="${esc(v)}" placeholder="例）交差点を曲がろうとした">
+        <button class="iconbtn" title="削除">✕</button></div>`);
+      const inp=r.querySelector("input");
+      inp.addEventListener("input",()=>{ S.timeline[i]=inp.value; persist(); updateNav(); });
+      r.querySelector("button").onclick=()=>{ S.timeline.splice(i,1); if(!S.timeline.length)S.timeline=[""]; draw(); persist(); updateNav(); };
+      tl.appendChild(r);
+    });
+  }
+  draw();
+  c.querySelector("#addtl").onclick=()=>{ S.timeline.push(""); draw(); persist(); };
+  const ex=c.querySelector("#tlex");
+  TIMELINE_EX.forEach(x=>{
+    const ch=el(`<span class="chip ex">＋ ${esc(x)}</span>`);
+    ch.onclick=()=>{ if(S.timeline.length===1&&!S.timeline[0])S.timeline[0]=x; else S.timeline.push(x); draw(); persist(); updateNav(); };
+    ex.appendChild(ch);
+  });
+  const dmg=c.querySelector("#dmg");
+  dmg.addEventListener("input",e=>{ S.damage=e.target.value; persist(); });
+  const addDmg=x=>{ const cur=(S.damage||"").trim(); S.damage=(cur?cur+" ":"")+x; dmg.value=S.damage; persist(); };
+  const dpEx=c.querySelector("#dmgpart"); DAMAGE_PART.forEach(x=>{ const cc=el(`<span class="chip ex">＋ ${esc(x)}</span>`); cc.onclick=()=>addDmg(x); dpEx.appendChild(cc); });
+  const dkEx=c.querySelector("#dmgkind"); DAMAGE_KIND.forEach(x=>{ const cc=el(`<span class="chip">${esc(x)}</span>`); cc.onclick=()=>addDmg(x); dkEx.appendChild(cc); });
+}
+
+/* ---------- Step3 なぜなぜ ---------- */
+function minWhy(){ return SEV[S.severity] ? SEV[S.severity].minWhy : 3; }
+function stepWhy(){
+  const need=minWhy();
+  main.appendChild(el(`<div class="lead">「なぜ？」を1段ずつ掘ります。前の答えに「それはなぜ？」と続けます。<br>
+    今回は <b>最低 ${need} 段</b> まで掘りましょう（本人の不注意で止めず、車・道・段取り・会社の仕組みまで）。
+    各回答に <b>どの“骨”の話か</b> を選ぶと、次の魚の骨が自動でできます。</div>`));
+  const wrap=el(`<div id="whywrap"></div>`); main.appendChild(wrap);
+  const addbar=el(`<div style="margin:8px 0 4px"><button class="addbtn" id="addwhy">＋ もう一段「なぜ？」を掘る</button></div>`);
+  main.appendChild(addbar);
+  function refreshNudgeFor(card,w,i){
+    const slot=card.querySelector(".nudge-slot"); if(!slot) return; slot.innerHTML="";
+    const a=(w.answer||"").trim();
+    if(!a) return;
+    if(a.length<6){ slot.appendChild(el(`<div class="softnudge"><b>もう少しだけ</b>くわしく。ひと言だと原因が見えません。</div>`)); return; }
+    if(i>0 && a===(S.whys[i-1].answer||"").trim()){ slot.appendChild(el(`<div class="softnudge">前の段と同じ答えです。<b>もう一歩</b>進めて「それはなぜ？」を書きましょう。</div>`)); return; }
+    const banned=hitBanned(a);
+    if(banned){ slot.appendChild(el(`<div class="softnudge">「${esc(banned)}」で止めないで。<b>あと一歩</b>、車・道・段取り・会社の仕組みのどれかまで掘ってみましょう。</div>`)); return; }
+    if(!w.bone){ slot.appendChild(el(`<div class="softnudge">この答えは <b>どの骨の話か</b> を選んでください（魚の骨に使います）。</div>`)); }
+  }
+  function draw(){
+    wrap.innerHTML="";
+    S.whys.forEach((w,i)=>{
+      const lvl=WHY_LEVELS[Math.min(i,WHY_LEVELS.length-1)];
+      const prev = i>0 ? S.whys[i-1].answer : "";
+      const card=el(`<div class="why">
+        <div class="qn">${i+1}段目：${i===0?"":'<span style="color:#0095D9">なぜ？</span> '}${esc(lvl.q)}</div>
+        <div class="focus">▶ ${esc(lvl.focus)}</div>
+        ${prev?`<div class="quote">前の答え：「${esc(prev)}」 …それはなぜ？</div>`:""}
+        <textarea placeholder="ここに答えを書く（例文はタップで入ります）">${esc(w.answer)}</textarea>
+        <div class="chips ex-chips"></div>
+        <div style="font-size:13px;color:#3d4b55;margin-top:10px">この答えは、どの骨の話ですか？</div>
+        <div class="bonepick"></div>
+        <div class="nudge-slot"></div>
+      </div>`);
+      const ta=card.querySelector("textarea");
+      ta.addEventListener("input",()=>{ w.answer=ta.value; persist(); refreshNudgeFor(card,w,i); if(i+1<wrap.children.length)refreshNudgeFor(wrap.children[i+1],S.whys[i+1],i+1); updateNav(); });
+      const exch=card.querySelector(".ex-chips");
+      const exBone = i>=4 ? "rule_mgmt" : i===3 ? "psych_time" : i===2 ? "vehicle" : i===1 ? "psych_time" : "road_env";
+      (BONEMAP[exBone].ex||[]).slice(0,3).forEach(x=>{
+        const ch=el(`<span class="chip ex">${esc(x)}</span>`);
+        ch.onclick=()=>{ ta.value=x; w.answer=x; persist(); refreshNudgeFor(card,w,i); updateNav(); };
+        exch.appendChild(ch);
+      });
+      const bp=card.querySelector(".bonepick");
+      BONES.forEach(b=>{
+        const on=w.bone===b.key;
+        const chip=el(`<span class="bp${on?" on":""}" style="${on?`background:${b.color}`:""}">${esc(b.plain)}</span>`);
+        chip.onclick=()=>{ w.bone=(w.bone===b.key?"":b.key); persist(); draw(); updateNav(); };
+        bp.appendChild(chip);
+      });
+      if(i>=1){ const del=el(`<button class="iconbtn" style="float:right;margin-top:-6px" title="この段を消す">✕</button>`);
+        del.onclick=()=>{ S.whys.splice(i,1); draw(); updateNav(); persist(); }; card.querySelector(".qn").prepend(del); }
+      wrap.appendChild(card);
+      refreshNudgeFor(card,w,i);
+    });
+  }
+  draw();
+  addbar.querySelector("#addwhy").onclick=()=>{ S.whys.push(makeWhy()); draw(); updateNav(); persist(); };
+}
+
+/* ---------- Step4 フィッシュボーン ---------- */
+function stepFish(){
+  main.appendChild(el(`<div class="lead">なぜなぜで出た原因を、自動で <b>5つの骨</b> に並べました。<br>
+    空いている骨は「本当に無いか？」を確かめ、思いつくものを足してください。
+    特に <b style="color:#00467A">ルール・管理（会社の仕組み）</b> が空のままだと、また同じ事故が起きます。</div>`));
+  const fwrap=el(`<div class="fishwrap" id="fishsvg"></div>`); main.appendChild(fwrap);
+  const groups=el(`<div id="bonegroups"></div>`); main.appendChild(groups);
+  function drawAll(){
+    const pool=factorPool();
+    drawSVG(fwrap, pool);
+    groups.innerHTML="";
+    BONES.forEach(b=>{
+      const fs=pool.filter(f=>f.bone===b.key);
+      const g=el(`<div class="bonegroup" style="border-left:5px solid ${b.color}">
+        <h4><span class="dot" style="background:${b.color}"></span>${esc(b.label)} <span class="pl">／ ${esc(b.plain)}</span></h4>
+        <div class="prompt">${esc(b.prompt)}</div><div class="flist"></div><div class="addrow"></div></div>`);
+      const fl=g.querySelector(".flist");
+      if(!fs.length){ fl.appendChild(el(`<div class="emptybone">― まだありません ―</div>`)); }
+      fs.forEach(f=>{
+        const row=el(`<div class="factor"><div class="txt">${esc(f.text)}</div><span class="src">${f.src}</span></div>`);
+        if(f.src==="追加"){ const del=el(`<button class="iconbtn" title="削除">✕</button>`); del.onclick=()=>{ S.factors=S.factors.filter(x=>x.id!==f.ref); drawAll(); updateNav(); persist(); }; row.appendChild(del); }
+        fl.appendChild(row);
+      });
+      const ar=g.querySelector(".addrow");
+      const add=el(`<div class="rowline"><input class="grow" type="text" placeholder="この骨に原因を足す…"><button class="addbtn">追加</button></div>`);
+      const inp=add.querySelector("input");
+      const doAdd=()=>{ const v=inp.value.trim(); if(!v)return; S.factors.push({id:nid(),bone:b.key,text:v}); inp.value=""; drawAll(); updateNav(); persist(); };
+      add.querySelector("button").onclick=doAdd;
+      inp.addEventListener("keydown",e=>{ if(e.key==="Enter")doAdd(); });
+      ar.appendChild(add);
+      const ch=el(`<div class="chips"></div>`);
+      b.ex.forEach(x=>{ const cc=el(`<span class="chip ex">＋ ${esc(x)}</span>`); cc.onclick=()=>{ S.factors.push({id:nid(),bone:b.key,text:x}); drawAll(); updateNav(); persist(); }; ch.appendChild(cc); });
+      ar.appendChild(ch);
+      groups.appendChild(g);
+    });
+  }
+  drawAll();
+}
+/* drawSVG：第3引数opts追加（省略時は現行動作のまま＝画面表示は無変更）。
+   opts={print:true, rootRefs:Set, cmNoByRef:Map} のとき（設計 4.4）：
+   ・各骨の表示件数 3→4件、真因を優先表示
+   ・真因の要因テキストを赤枠（#d6453c・太さ2.5）で囲み、脇に「対策No.n」を赤字表示 */
+function drawSVG(container, pool, opts){
+  const P=opts||{}, isPrint=!!P.print, rootRefs=P.rootRefs||null, cmNoByRef=P.cmNoByRef||null;
+  const MAXF=isPrint?4:3;
+  const W=1000,H=560,headX=860,startX=70,spineY=280;
+  const head = S.facts.place ? S.facts.place : "事故";
+  const top=["driver","vehicle","psych_time"], bottom=["road_env","rule_mgmt"];
+  const ns="http://www.w3.org/2000/svg";
+  const svg=document.createElementNS(ns,"svg"); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  function line(x1,y1,x2,y2,col,w){ const l=document.createElementNS(ns,"line"); l.setAttribute("x1",x1);l.setAttribute("y1",y1);l.setAttribute("x2",x2);l.setAttribute("y2",y2);l.setAttribute("stroke",col);l.setAttribute("stroke-width",w||3);l.setAttribute("stroke-linecap","round");svg.appendChild(l); }
+  function text(x,y,t,col,size,anchor,weight){ const e=document.createElementNS(ns,"text"); e.setAttribute("x",x);e.setAttribute("y",y);e.setAttribute("fill",col||"#10202b");e.setAttribute("font-size",size||13);e.setAttribute("text-anchor",anchor||"start");if(weight)e.setAttribute("font-weight",weight);e.textContent=t;svg.appendChild(e); }
+  line(startX,spineY,headX,spineY,"#33505f",4);
+  const tri=document.createElementNS(ns,"polygon"); tri.setAttribute("points",`${headX},${spineY-44} ${headX},${spineY+44} ${headX+110},${spineY}`); tri.setAttribute("fill","#00467A"); svg.appendChild(tri);
+  text(headX+12,spineY-6,"事故","#fff",15,"start","800");
+  const hd=head.length>7?head.slice(0,7)+"…":head; text(headX+12,spineY+15,hd,"#dbe9f3",11,"start");
+  function place(keys,dir){
+    const span=(headX-startX-120);
+    keys.forEach((k,idx)=>{
+      const b=BONEMAP[k];
+      const bx = startX+90 + span*((idx+0.7)/(keys.length+0.2));
+      const baseY=spineY, tipY=spineY+dir*160, tipX=bx-90;
+      line(bx,baseY,tipX,tipY,b.color,3);
+      /* ラベル幅は全角約12px/字で計算（旧: *7+18 は全角幅を想定しておらず長いラベルが
+         矩形からはみ出て白文字が見えなくなっていた。最長17字×12.5+16=228.5 < viewBox内） */
+      const lw=Math.min(240, Math.max(96, b.plain.length*12.5+16));
+      const rect=document.createElementNS(ns,"rect"); rect.setAttribute("x",tipX-lw/2);rect.setAttribute("y",dir<0?tipY-26:tipY+2);rect.setAttribute("width",lw);rect.setAttribute("height",24);rect.setAttribute("rx",7);rect.setAttribute("fill",b.color);svg.appendChild(rect);
+      text(tipX,dir<0?tipY-9:tipY+19,b.plain,"#fff",12,"middle","700");
+      const all=pool.filter(f=>f.bone===k);
+      let fs;
+      if(isPrint&&rootRefs){ fs=all.filter(f=>rootRefs.has(f.ref)).concat(all.filter(f=>!rootRefs.has(f.ref))).slice(0,MAXF); }
+      else { fs=all.slice(0,MAXF); }
+      fs.forEach((f,j)=>{
+        const t=(j+1)/(fs.length+1); const px=bx+(tipX-bx)*t, py=baseY+(tipY-baseY)*t, ex=px+44;
+        line(px,py,ex,py,b.color,1.5);
+        const tx=f.text.length>12?f.text.slice(0,12)+"…":f.text;
+        const ty=py+(dir<0?-1:11);
+        text(ex+4, ty, tx, "#33505f", 10, "start");
+        if(isPrint&&rootRefs&&rootRefs.has(f.ref)){
+          const rw=tx.length*10.5+10;
+          const rc=document.createElementNS(ns,"rect");
+          rc.setAttribute("x",ex+1); rc.setAttribute("y",ty-11); rc.setAttribute("width",rw); rc.setAttribute("height",15);
+          rc.setAttribute("rx",3); rc.setAttribute("fill","none"); rc.setAttribute("stroke","#d6453c"); rc.setAttribute("stroke-width",2.5);
+          svg.appendChild(rc);
+          const nums=cmNoByRef?cmNoByRef.get(f.ref):null;
+          if(nums&&nums.length){ text(ex+4, ty+(dir<0?-16:17), "対策No."+nums.join("・"), "#d6453c", 10, "start", "800"); }
+        }
+      });
+      if(all.length>fs.length){ const py=baseY+(tipY-baseY)*0.9; text(bx-40,py+(dir<0?-2:12),`ほか${all.length-fs.length}件`,"#7a8a90",9.5,"start"); }
+    });
+  }
+  place(top,-1); place(bottom,1);
+  container.innerHTML=""; container.appendChild(svg);
+}
+
+/* ---------- Step5 真因 ---------- */
+function stepRoot(){
+  const pool=factorPool();
+  main.appendChild(el(`<div class="lead">並んだ原因から、<b>「これを潰せば再発しない」</b>という根っこを <b>1〜3個</b> 選びます。<br>
+    多くは <b style="color:#00467A">ルール・管理</b> や <b style="color:#e8821c">心理・時間</b> の骨にあります。選んだら、一言だけ理由を添えてください。</div>`));
+  if(!pool.length){ main.appendChild(el(`<div class="card note">まだ原因がありません。前のステップで原因を入れてください。</div>`)); return; }
+  const wrap=el(`<div class="card"></div>`); main.appendChild(wrap);
+  pool.forEach(f=>{
+    const b=BONEMAP[f.bone], on=S.roots.includes(f.ref);
+    const row=el(`<div class="pickrow${on?" on":""}"><input type="checkbox" ${on?"checked":""}>
+      <div class="pl"><span class="tag" style="background:${b.color}">${esc(b.plain)}</span><div>${esc(f.text)}</div>
+      <div class="reason" style="margin-top:7px;${on?"":"display:none"}">
+        <input type="text" placeholder="なぜこれが根っこ？（例：これが無いと毎回起きる）" value="${esc(S.rootReason[f.ref]||"")}" style="font-size:14px"></div></div></div>`);
+    const cb=row.querySelector("input[type=checkbox]"), rin=row.querySelector(".reason input");
+    cb.addEventListener("change",()=>{
+      if(cb.checked){ if(S.roots.length>=3){ cb.checked=false; alert("根っこは最大3つまでにしぼりましょう。"); return; } S.roots.push(f.ref); }
+      else S.roots=S.roots.filter(x=>x!==f.ref);
+      persist(); render();
+    });
+    rin.addEventListener("input",()=>{ S.rootReason[f.ref]=rin.value; persist(); });
+    wrap.appendChild(row);
+  });
+}
+
+/* ---------- Step6 対策 ---------- */
+function stepCM(){
+  main.appendChild(el(`<div class="lead">選んだ根っこ <b>ごと</b> に対策を作ります。<br>
+    <b>誰が・いつまでに・何を・どう確認</b> を埋めてください。「気をつける」「徹底する」だけは <b style="color:#d6453c">赤信号</b>。
+    具体的に書けたら <b style="color:#2e8b57">緑でほめます</b>！</div>`));
+  const roots=S.roots.map(factorByRef).filter(Boolean);
+  if(!roots.length){ main.appendChild(el(`<div class="card note">先に「本当の原因」を選んでください。</div>`)); return; }
+  roots.forEach(r=>{
+    const b=BONEMAP[r.bone];
+    if(!S.cms.some(c=>c.forRef===r.ref)) S.cms.push({id:nid(),forRef:r.ref,who:"",when:"",what:"",verify:""});
+    const block=el(`<div class="card" style="border-top:4px solid ${b.color}">
+      <div style="font-size:13px;color:#3d4b55">根っこ <span class="tagmini" style="background:${b.color}">${esc(b.plain)}</span></div>
+      <div style="font-weight:800;color:var(--navy);margin:3px 0 2px;font-size:16px">${esc(r.text)}</div>
+      <div class="cms"></div><button class="addbtn" style="margin-top:6px">＋ この原因にもう1つ対策</button></div>`);
+    const cms=block.querySelector(".cms");
+    function drawCMs(){ cms.innerHTML=""; S.cms.filter(c=>c.forRef===r.ref).forEach(c=>drawOne(c,cms)); }
+    block.querySelector(".addbtn").onclick=()=>{ S.cms.push({id:nid(),forRef:r.ref,who:"",when:"",what:"",verify:""}); drawCMs(); updateNav(); persist(); };
+    main.appendChild(block); drawCMs();
+  });
+}
+function praiseMsg(c){
+  const sys=["チェックリスト","手順","マップ","ルール","カード","記録","台帳","表","リスト","点検","研修","フロー","掲示","ダブルチェック","標準化","マニュアル"];
+  const hasSys=sys.some(x=>(c.what||"").includes(x));
+  const full=smartFilled(c)>=4;
+  if(full&&hasSys) return "💯 完璧です！『誰が・いつ・何を・どう確認』が全部そろって、しかも“仕組み”に落ちています。これなら人が代わっても続きます。お見事！👏";
+  if(full) return "💯 全部そろいました！具体的で、明日から実行できる対策です。すばらしい！👏";
+  if(hasSys) return "👏 いいですね！“仕組み”に落ちていて、その場限りでなく続く対策になっています。この調子！";
+  const pool=["🟢 いいですね！具体的で、ちゃんと実行できる対策です👏","🟢 グッド！誰が何をするかが見えていて、これは回ります。その調子！","🟢 すばらしい。これなら『気をつける』で終わらず、本当に再発を防げます👏"];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function drawOne(c,parent){
+  const box=el(`<div class="cm"><div class="head"><span class="badge">　</span><div class="cause"></div>
+    <button class="iconbtn" title="この対策を消す">✕</button></div><div class="smart"></div><div class="slot"></div></div>`);
+  box.querySelector(".iconbtn").onclick=()=>{ S.cms=S.cms.filter(x=>x.id!==c.id); persist(); render(); };
+  const sm=box.querySelector(".smart");
+  SMART_FIELDS.forEach(f=>{
+    const w=el(`<div class="f"><label>${f.label}</label><div class="q">${f.q}</div>
+      ${f.k==="what"?`<textarea placeholder="${esc(f.ph)}">${esc(c[f.k]||"")}</textarea>`:`<input type="text" placeholder="${esc(f.ph)}" value="${esc(c[f.k]||"")}">`}</div>`);
+    const inp=w.querySelector("input,textarea");
+    inp.addEventListener("input",()=>{ c[f.k]=inp.value; persist(); refresh(); updateNav(); });
+    sm.appendChild(w);
+  });
+  const slot=box.querySelector(".slot");
+  function refresh(){
+    const s=scoreCM(c), badge=box.querySelector(".badge");
+    badge.className="badge "+s.lv;
+    badge.textContent=`${s.lv==="ok"?"🟢":s.lv==="mid"?"🟡":"🔴"} ${s.label}（${s.filled}/4）`;
+    slot.innerHTML="";
+    if(s.lv==="ok"){ slot.appendChild(el(`<div class="praiseline">${praiseMsg(c)}</div>`)); return; }
+    if(s.banned && s.filled<3){
+      slot.appendChild(el(`<div class="alertline">「${esc(s.banned)}」は気持ちの話で、誰がやるか・どう確認するかが無いので実行されません。下の言い換え例を使うか、具体的な手順に直しましょう。</div>`));
+    } else if(s.lv==="mid"){
+      slot.appendChild(el(`<div class="softnudge">あと一歩！「誰が・いつ・何を・どう確認」のうち、空いているところを埋めると“実行できる対策”になります👍</div>`));
+    }
+    const rw=el(`<div class="rewrite"><div class="ttl">💡 言い換えのヒント（タップで「何を」に入ります）</div></div>`);
+    REWRITES.slice(0,3).forEach(r=>{ const one=el(`<div class="one"><button class="addbtn" style="padding:6px 10px">使う</button><div><small style="color:#888">弱い例：${esc(r.weak)}</small><br>${esc(r.strong)}</div></div>`); one.querySelector("button").onclick=()=>{ c.what=r.strong; persist(); render(); }; rw.appendChild(one); });
+    slot.appendChild(rw);
+  }
+  parent.appendChild(box); refresh();
+}
+
+/* ---------- Step7 出力 ---------- */
+function buildReport(){
+  const pool=factorPool(), causes=pool.slice(0,6), rootRefs=new Set(S.roots);
+  const cms=S.cms.filter(c=> rootRefs.has(c.forRef) && (c.what||c.who||"").trim() ).slice(0,5);
+  const anyRed=S.cms.some(c=> rootRefs.has(c.forRef) && scoreCM(c).lv==="bad");
+  const f=S.facts;
+  const accLabel=(ACCMAP[f.accType]||{}).t||"";
+  const vc=VCLASSMAP[f.vClass], vLabel=vc?vc.t:"", needLease=!!(vc&&vc.report);
+  const five = `${fmtDateTime(f.datetime)||"（日時）"}、${f.place||"（場所）"}で、${f.driver||"（運転者）"}が ${f.vehicle||"（車両）"} を運転中、`
+    + (S.timeline.filter(Boolean).join("→") || "（状況）") + "。";
+  const cmText=c=>{ const p=[]; if(c.who)p.push(c.who+"が"); if(c.when)p.push(c.when+"に"); if(c.what)p.push(c.what); if(c.verify)p.push("（確認："+c.verify+"）"); return p.join(" ")||"—"; };
+  let causeLi=""; causes.forEach(c=>{ causeLi+=`<li>${esc(c.text)} <span class="bk">［${esc(BONEMAP[c.bone].plain)}］</span></li>`; }); if(!causeLi)causeLi="<li>―</li>";
+  let cmLi=""; cms.forEach(c=>{ cmLi+=`<li>${esc(cmText(c))}</li>`; }); if(!cmLi)cmLi="<li>―</li>";
+  return `<div class="report">
+    <h3>事故・クレーム報告書　ふりかえり分析シート ${anyRed?'<span class="needfix">※要再検討</span>':''}</h3>
+    <table>
+      <colgroup><col style="width:18%"><col style="width:32%"><col style="width:18%"><col style="width:32%"></colgroup>
+      <tr><th>報告部署・報告者</th><td>${esc(f.reporter||"")}</td><th>受付者</th><td>${esc(f.receiver||"")}</td></tr>
+      <tr><th>発生日時</th><td>${esc(fmtDateTime(f.datetime)||"")}</td><th>発生場所</th><td>${esc(f.place||"")}</td></tr>
+      <tr><th>運転者</th><td>${esc(f.driver||"")}</td><th>車両</th><td>${esc(f.vehicle||"")}</td></tr>
+      <tr><th>事故区分</th><td>${esc(accLabel)}${f.accType==="other"&&f.otherParty?`<br><span class="bk">相手：${esc(f.otherParty)}</span>`:""}</td><th>車両区分</th><td>${esc(vLabel)}</td></tr>
+      ${needLease?`<tr><td class="sec" colspan="4" style="background:#fdecea;color:#8f231c">⚠ リース会社「${esc(f.leaseCo||"（未記入）")}」への事故報告が必要${f.leaseContact?`／担当者：${esc(f.leaseContact)}`:""}（本人へ直接連絡：${f.leaseContacted?"済み":"まだ（本人と話せるまで保留・伝言不可）"}）</td></tr>`:""}
+      <tr><th>天候・路面</th><td colspan="3">${esc(f.weather||"")}　／　${esc(f.road||"")}</td></tr>
+      <tr><td class="sec" colspan="4">クレーム内容（5W1H）</td></tr>
+      <tr><td colspan="4">${esc(five)}</td></tr>
+      <tr><td class="sec" colspan="4">被害・対応状況</td></tr>
+      <tr><td colspan="4">${esc(S.damage||"")}</td></tr>
+      <tr><td class="sec" colspan="4">主な発生要因（魚の骨で整理）</td></tr>
+      <tr><td colspan="4"><ol>${causeLi}</ol></td></tr>
+      <tr><td class="sec" colspan="4">再発防止策（誰が・いつ・何を・どう確認）</td></tr>
+      <tr><td colspan="4"><ol>${cmLi}</ol></td></tr>
+      <tr><th>検討メンバー</th><td colspan="3">${esc(S.members||"")}</td></tr>
+    </table>
+    <div class="bk" style="padding:6px 8px">※このシートはフジ自動車工業「事故・クレーム報告書」の再発防止策検討欄を補助するものです。回覧：該当部署長 → 専務 → 保険 → 社長 → 経営管理。</div>
+  </div>`;
+}
+function stepReport(){
+  const rootRefs=new Set(S.roots), live=S.cms.filter(c=>rootRefs.has(c.forRef));
+  const cnt=l=>live.filter(c=>scoreCM(c).lv===l).length;
+  const anyRed=cnt("bad")>0;
+  main.appendChild(el(`<div class="card">
+    <div class="field"><label>検討メンバー（アメーバ全員で検討）</label>
+    <div class="hint">2名以上で。例）フロント担当・整備担当・運転者本人</div>
+    <input type="text" id="mem" value="${esc(S.members)}" placeholder="例）担当者2名以上"></div>
+    <div class="pillrow"><span class="pill">対策の自己採点：🟢具体的 ${cnt("ok")} ／ 🟡あと一歩 ${cnt("mid")} ／ 🔴精神論 ${cnt("bad")}</span></div>
+    ${(cnt("bad")===0&&cnt("ok")>0)?`<div class="praiseline" style="margin-top:10px">${cnt("mid")===0?"🎉 全部の対策が具体的です！文句なし。ここまで整理できたら、現場は確実に変わります。お疲れさまでした👏":"🟢 具体的な対策がそろってきました。いい調子です！残りも“誰が・いつ・何を”を足すと完璧です👏"}</div>`:""}
+    ${anyRed?`<div class="alertline" style="margin-top:10px">🔴 精神論ぎみの対策が残っています。提出はできますが、報告書に <b>「要再検討」</b> の印が付きます。前に戻って直すことをおすすめします。</div>`:""}
+  </div>`));
+  main.querySelector("#mem").addEventListener("input",e=>{ S.members=e.target.value; persist(); });
+
+  /* ▼ 印刷する書類の選択（設計 2.3。1回の印刷で1書類ずつ） */
+  const DOCS=[
+    {k:"report",t:"ふりかえり報告書",  note:"従来どおりの分析シートです（A4縦）。"},
+    {k:"shim",  t:"始末書",            note:"日付・住所・氏名は本人が手書きし、押印してください（A4縦）。"},
+    {k:"jokyo", t:"事故発生状況報告書",note:"状況図・回覧欄は印刷後に手書き。運転免許証のコピーを添付（従来どおり）（A4縦）。"},
+    {k:"fish",  t:"魚の骨の図",        note:"手書きの原因分析図の置き換え。真因は赤囲みで印字されます（A4横）。"}
+  ];
+  const selCard=el(`<div class="card">
+    <div class="field" style="margin-bottom:4px"><label>印刷する書類</label>
+      <div class="hint">1回の印刷で1書類ずつ。書類を替えるたびに選び直して印刷してください。</div>
+      <div class="chips" id="docchips"></div></div>
+    <div class="note" id="docnote"></div>
+    <div id="birthslot"></div>
+  </div>`);
+  const chipbox=selCard.querySelector("#docchips");
+  DOCS.forEach(d=>{
+    const ch=el(`<span class="chip">${d.t}</span>`);
+    ch.onclick=()=>{ printDoc=d.k; syncDocUI(); renderPreview(); };
+    chipbox.appendChild(ch);
+  });
+  function syncDocUI(){
+    chipbox.querySelectorAll(".chip").forEach((c,i)=>setChip(c,DOCS[i].k===printDoc));
+    const d=DOCS.find(x=>x.k===printDoc)||DOCS[0];
+    selCard.querySelector("#docnote").textContent="※ "+d.note;
+    const bs=selCard.querySelector("#birthslot"); bs.innerHTML="";
+    if(printDoc==="jokyo"){
+      /* 生年月日：印刷直前だけ入力する非保存欄（決定事項①・設計 2.4） */
+      const w=el(`<div class="field" style="margin-top:10px"><label>印刷のときだけ入力（この端末にも台帳にも保存されません）</label>
+        <div class="hint">運転者の生年月日（和暦のまま自由入力）</div>
+        <input type="text" placeholder="例）昭和40年1月1日" value="${esc(PRINT_ONLY.birth)}">
+        <div class="note" style="margin-top:5px">保存されないため、開き直すと空欄に戻ります。印刷し直すときはもう一度入力してください。</div></div>`);
+      w.querySelector("input").addEventListener("input",e=>{
+        PRINT_ONLY.birth=e.target.value;   /* 非保存：ここでpersist()は呼ばない */
+        const bv=prev.querySelector(".birthval"); if(bv) bv.textContent=birthCellText(PRINT_ONLY.birth);
+      });
+      bs.appendChild(w);
+    }
+  }
+  main.appendChild(selCard);
+
+  const prev=el(`<div class="card"><div style="font-weight:800;color:var(--navy);margin-bottom:8px;font-size:16px">📄 プレビュー</div><div id="prevbox"></div></div>`);
+  main.appendChild(prev);
+  function renderPreview(){
+    const box=prev.querySelector("#prevbox");
+    if(printDoc==="shim"){ box.innerHTML=buildShimatsusho(); }
+    else if(printDoc==="jokyo"){ box.innerHTML=buildJokyoHokokusho(); }
+    else if(printDoc==="fish"){ box.innerHTML=buildFishboneSheet(); mountFish(box); }
+    else { box.innerHTML=buildReport(); }
+  }
+  syncDocUI(); renderPreview();
+
+  const acts=el(`<div class="card"><div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn prim" id="pr">🖨 選んだ書類を印刷 / PDF保存</button>
+      <button class="btn go" id="sv">💾 この記録を保存（台帳へ）</button></div>
+    <div class="note" style="margin-top:10px">※入力したデータは <b>この端末の中だけ</b> に保存されます（外部に送信しません）。免許証やナンバーなどの個人情報は社外に出ません。生年月日は保存されず、印刷のときだけ使われます。</div></div>`);
+  main.appendChild(acts);
+  acts.querySelector("#pr").onclick=printSelected;
+  acts.querySelector("#sv").onclick=saveCase;
+}
+/* doPrint：opts追加（省略時は従来どおりA4縦・余白12mm＝後方互換）。
+   印刷直前に <style id="pageStyle"> を書き換えて縦A4/横A4を1書類ずつ切り替える（設計 4.3） */
+function doPrint(html,opts){
+  const pa=document.getElementById("print-area");
+  pa.innerHTML=html;
+  if(opts&&typeof opts.mount==="function") opts.mount(pa);
+  const ps=document.getElementById("pageStyle");
+  if(ps){ ps.textContent="@media print{ @page{size:"+((opts&&opts.page)||"A4")+";margin:"+((opts&&opts.margin)||"12mm")+"} }"; }
+  window.print();
+}
+function printSelected(){
+  if(printDoc==="shim")       doPrint(buildShimatsusho(),   {page:"A4 portrait", margin:"12mm"});
+  else if(printDoc==="jokyo") doPrint(buildJokyoHokokusho(),{page:"A4 portrait", margin:"10mm"});
+  else if(printDoc==="fish")  doPrint(buildFishboneSheet(), {page:"A4 landscape",margin:"10mm", mount:mountFish});
+  else                        doPrint(buildReport());
+}
+
+/* ============================================================
+   様式印字の共通下請け（設計 4.2。buildReport()は無変更のまま、
+   同じロジックを複製して切り出したもの。番号は従来報告書と一致する）
+   ============================================================ */
+/* 真因に紐づき記入のある対策を配列順に最大5件（buildReport()内のcms抽出と同一式） */
+function liveCms(){
+  const rootRefs=new Set(S.roots);
+  return S.cms.filter(c=> rootRefs.has(c.forRef) && (c.what||c.who||"").trim() ).slice(0,5);
+}
+/* 対策1件の文（buildReport()内のcmTextと同一式） */
+function cmLineText(c){ const p=[]; if(c.who)p.push(c.who+"が"); if(c.when)p.push(c.when+"に"); if(c.what)p.push(c.what); if(c.verify)p.push("（確認："+c.verify+"）"); return p.join(" ")||"—"; }
+/* 5W一文（buildReport()内のfiveと同一式） */
+function fiveW(){
+  const f=S.facts;
+  return `${fmtDateTime(f.datetime)||"（日時）"}、${f.place||"（場所）"}で、${f.driver||"（運転者）"}が ${f.vehicle||"（車両）"} を運転中、`
+    + (S.timeline.filter(Boolean).join("→") || "（状況）") + "。";
+}
+/* 運転者欄から年齢チップ語（20代〜70歳以上）を除いた氏名 */
+function cleanName(s){
+  let t=(s||"");
+  AGE_EX.forEach(a=>{ t=t.split(a).join(""); });
+  return t.replace(/\s+/g," ").trim();
+}
+/* 半角数字→全角（縦書きの始末書用） */
+function toZen(s){ return (s||"").replace(/[0-9]/g,d=>"０１２３４５６７８９"[+d]); }
+/* datetime-local値の分解 */
+function parseDT(v){
+  const m=/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/.exec(v||"");
+  if(!m) return null;
+  return {y:+m[1],mo:+m[2],d:+m[3],h:m[4]!=null?+m[4]:null,mi:m[5]!=null?+m[5]:null};
+}
+/* 選択肢列（晴・曇・雨・雪 等）のうち入力値に一致する語を丸囲み。
+   一致しない自由入力は囲まず右に小さく添え書き（設計 5.2） */
+function circledList(opts,val){
+  const v=(val||"").trim();
+  const hit=v?opts.find(o=>v.indexOf(o)>=0):null;
+  let html=opts.map(o=>o===hit?`<span class="maru">${esc(o)}</span>`:esc(o)).join("・");
+  if(v&&!hit) html+=` <span class="note-fine">（${esc(v)}）</span>`;
+  return html;
+}
+/* 生年月日セルの表示文（未入力ならガイドのみ） */
+function birthCellText(b){ return (b&&b.trim()) ? b.trim()+"　生まれ" : "　　　　年　　月　　日　生まれ"; }
+/* 真因ref → 対策No.配列（liveCms()の並び順＝従来報告書の番号と同じ） */
+function buildCmNoMap(){
+  const m=new Map();
+  liveCms().forEach((c,i)=>{ const a=m.get(c.forRef)||[]; a.push(i+1); m.set(c.forRef,a); });
+  return m;
+}
+/* 魚の骨シートのSVGを差し込む（プレビュー・印刷の両方から使う） */
+function mountFish(rootEl){
+  const slot=rootEl.querySelector(".fishslot");
+  if(slot) drawSVG(slot, factorPool(), {print:true, rootRefs:new Set(S.roots), cmNoByRef:buildCmNoMap()});
+}
+
+/* ============================================================
+   始末書（A4縦・横書き。原本=様式原本 からの転記。原本が横書きと
+   判明したため担当が横書きへ切替済み（設計方針の保険条項・画面設計5章）。
+   日付・住所・氏名・押印のみ手書き＝決定事項⑥）
+   ============================================================ */
+function buildShimatsusho(){
+  const name=cleanName(S.facts.driver);
+  const nameHtml=name?esc(toZen(name)):'<span class="blankcell" style="min-width:6em"></span>';
+  let naiyo=fiveW();
+  if(S.damage&&S.damage.trim()) naiyo+="　被害状況："+S.damage.trim();
+  const cms=liveCms();
+  let kaizen="";
+  cms.forEach((c,i)=>{ kaizen+=(kaizen?"\n":"")+"No."+(i+1)+"　"+cmLineText(c); });
+  /* 1枚厳守（基準6）：長文はフォント縮小→それでも超える場合のみ末尾を丸める。
+     しきい値は仮置き（実機の試し刷りで担当が調整） */
+  if(naiyo.length>400)  naiyo=naiyo.slice(0,400)+"…（詳細はふりかえり報告書のとおり）";
+  if(kaizen.length>600) kaizen=kaizen.slice(0,600)+"…（詳細はふりかえり報告書のとおり）";
+  const small=(naiyo.length+kaizen.length)>330?" small":"";
+  const naiyoHtml=esc(toZen(naiyo));
+  const kaizenHtml=esc(toZen(kaizen)).replace(/\n/g,"<br>");
+  return `<div class="fsheet shim"><div class="shim-inner${small}">
+    <div class="shim-date"></div>
+    <div class="shim-to">フジ自動車工業株式会社<br>代表取締役　山田久利　様</div>
+    <div class="shim-title">始末書</div>
+    <div class="shim-body">　私こと、${nameHtml}は、下記の件につき、関係する皆様方にご迷惑をかけたことを反省するとともに、深くお詫び申し上げます。今後はこのような事態を再び起こすことのないように、十分注意いたしますので、よろしくお願い申し上げます。<br>　万一、再び起こすようなことがあった場合、御社の処分に従うことを誓約いたします。</div>
+    <div class="shim-h">不始末内容</div>
+    <div class="dotlines shim-naiyo">${naiyoHtml}</div>
+    <div class="shim-h">今後再発しない為の改善、改良点</div>
+    <div class="dotlines shim-kaizen">${kaizenHtml}</div>
+    <div class="shim-sign">
+      <div class="shim-line">住所　<span class="blankcell shim-blank"></span></div>
+      <div class="shim-line">氏名　<span class="blankcell shim-blank"></span><span class="shim-stamp-space"></span></div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   事故発生状況報告書（A4縦。様式マップ=設計5章。
+   印字文言は実物スキャン（様式原本）からの転記。
+   連絡先は決定事項（決定事項）により会社TEL/FAXと緊急・夜間の両方を印字）
+   ============================================================ */
+function buildJokyoHokokusho(){
+  const f=S.facts;
+  const dt=parseDT(f.datetime);
+  const ampmHtml=`${dt&&dt.h!==null&&dt.h<12?'<span class="maru">AM</span>':"AM"}・${dt&&dt.h!==null&&dt.h>=12?'<span class="maru">PM</span>':"PM"}`;
+  const dateLine=`${dt?dt.y:"　　　"}年　${dt?dt.mo:"　"}月　${dt?dt.d:"　"}日　　${ampmHtml}　${dt&&dt.h!==null?dt.h:"　"}時　${dt&&dt.mi!==null?dt.mi:"　"}分頃`;
+  const ownerName=(f.vClass==="own"||f.vClass==="loaner")?"フジ自動車工業株式会社":(f.vClass==="lease"?(f.leaseCo||""):"");
+  const name=cleanName(f.driver);
+  const fk=f.isFL?(f.flKanri||""):"", fb=f.isFL?(f.flBan||""):"";
+  const tl=S.timeline.filter(t=>t&&t.trim());
+  const rows=Math.max(8,tl.length);
+  let situ=""; for(let i=0;i<rows;i++){ situ+=`<div class="dl">${tl[i]?esc(tl[i]):"&nbsp;"}</div>`; }
+  return `<div class="fsheet jokyo">
+  <div class="jokyo-head">
+    <div class="jokyo-titlebox">
+      <div class="jokyo-title">事故発生状況報告書</div>
+      <div class="jokyo-license">※運転免許証のコピーも合わせて提出して下さい。</div>
+    </div>
+    <table class="jokyo-contact">
+      <tr><th>TEL</th><td>052-882-9111</td><td class="cnote"></td></tr>
+      <tr><th>FAX</th><td>052-882-5260</td><td class="cnote"></td></tr>
+      <tr><th>緊急</th><td>080-6972-3381</td><td class="cnote">緊急連絡先（携帯）</td></tr>
+      <tr><th>夜間<br>土日</th><td>0120-119-110</td><td class="cnote">東京海上日動</td></tr>
+    </table>
+  </div>
+  <div class="jokyo-block"><div class="vlabel">自車・運転者</div><table class="jk">
+    <colgroup><col style="width:15%"><col style="width:22%"><col style="width:15%"><col style="width:16%"><col style="width:13%"><col style="width:19%"></colgroup>
+    <tr><th rowspan="2">会社名<div class="note-fine">（車両所有者）</div></th><td colspan="3" rowspan="2">${esc(ownerName)}</td><th>TEL</th><td></td></tr>
+    <tr><th>FAX</th><td></td></tr>
+    <tr><th>登録番号</th><td colspan="3"></td><th>車名</th><td>${esc(f.vehicle||"")}</td></tr>
+    <tr><th>車体番号</th><td colspan="5">${esc(f.vin||"")}</td></tr>
+    <tr><th>事故日時</th><td colspan="5">${dateLine}</td></tr>
+    <tr><th>フリガナ<br>運転者名</th><td colspan="2"><div class="kanaline">${f.driverKana?esc(f.driverKana):"&nbsp;"}</div><div class="nameline">${esc(name)}</div></td><td>${circledList(["男","女"],f.driverSex)}</td><td colspan="2"><div class="note-fine">生年月日</div><span class="birthval">${esc(birthCellText(PRINT_ONLY.birth))}</span></td></tr>
+    <tr><th>事故発生場所</th><td colspan="5"><span class="guide">都・道・府・県　　市・郡・町　　区　　町　　丁目　　番　　号</span><span class="placeval">${esc(f.place||"")}</span><div class="meishou"><span class="guide-inline">名称</span></div></td></tr>
+    <tr><th>天候</th><td colspan="2">（　${circledList(["晴","曇","雨","雪"],f.weather)}　）</td><th>損害箇所</th><td colspan="2">${esc(S.damage||"")}</td></tr>
+    <tr><th>路面</th><td colspan="2">（　${circledList(["乾燥","ウェット","凍結"],f.road)}　）</td><th>入庫予定修理工場</th><td colspan="2">${esc(f.repairShop||"")}<div class="guide-inline">TEL：</div></td></tr>
+  </table></div>
+  <div class="jokyo-block"><div class="vlabel">事故状況</div><div class="situ-wrap">
+    <div class="situ-grid">
+      <div class="situ-left"><div class="situ-h">事故発生の状況についてご記入下さい</div><div class="dotlines${tl.length>8?" small":""}">${situ}</div></div>
+      <div class="situ-right"><div class="situ-h">事故状況図<span class="nmark">N</span></div><div class="situ-sketch"></div></div>
+    </div>
+    <div class="jokyo-legend">自車 <span class="ar-self">⬆</span>　　他車 <span class="ar-other">⇧</span>　　信号・停止線・経路 等を図示して下さい</div>
+  </div></div>
+  <div class="jokyo-block"><div class="vlabel">相手情報</div><table class="jk">
+    <colgroup><col style="width:15%"><col style="width:22%"><col style="width:15%"><col style="width:16%"><col style="width:13%"><col style="width:19%"></colgroup>
+    <tr><th>会社名<br>勤務先名</th><td>${esc(f.opCompany||"")}</td><th>担当者</th><td></td><th>TEL</th><td></td></tr>
+    <tr><th>相手運転者</th><td>${esc(f.opDriver||"")}</td><th>住所</th><td colspan="3"></td></tr>
+    <tr><th>連絡先</th><td colspan="5"><span class="guide-inline">自宅：</span>${esc(f.opContact||"")}　　<span class="guide-inline">携帯：</span></td></tr>
+    <tr><th>登録番号</th><td>${esc(f.opRegno||"")}</td><th>車名</th><td>${esc(f.opCarName||"")}</td><th>損害箇所</th><td>${esc(f.opDamage||"")}</td></tr>
+    <tr><th>入庫予定修理工場</th><td colspan="5">${esc(f.opRepair||"")}　<span class="guide-inline">TEL：</span>　　<span class="guide-inline">担当：</span></td></tr>
+    <tr><th>相手保険会社</th><td colspan="2">${esc(f.opInsurer||"")}</td><th>連絡先</th><td colspan="2">${esc(f.opInsurerContact||"")}</td></tr>
+  </table></div>
+  <table class="jk jokyo-police">
+    <colgroup><col style="width:12%"><col style="width:30%"><col style="width:14%"><col style="width:20%"><col style="width:8%"><col style="width:16%"></colgroup>
+    <tr><th>警察届出</th><td><span class="placeval">${esc(f.police||"")}</span><span class="guide-inline">　署　　交番　様</span></td><th>ケガがあれば<br>病院名</th><td></td><th>TEL:</th><td></td></tr>
+    <tr><th>FL情報</th><th>管理番号</th><td>${esc(fk)}</td><th>F番</th><td colspan="2">${esc(fb)}</td></tr>
+    <tr><th>労災優先</th><td>${f.insPref==="rousai"?"○":""}</td><th>自賠責優先</th><td>${f.insPref==="jibai"?"○":""}</td><th>報告書作成者</th><td>${esc(f.author||"")}</td></tr>
+  </table>
+  <div class="jokyo-kairan"><span class="kairan-h">回覧確認</span><span class="stampbox"></span><span class="stampbox"></span><span class="stampbox"></span><span class="stampbox"></span><span class="stampbox"></span>
+    <div class="kairan-route">該当部署長 → 専務 → 保険 → 社長 → 経営管理</div></div>
+</div>`;
+}
+
+/* ============================================================
+   魚の骨 単独シート（A4横・手書き図の置き換え。設計7章）
+   ============================================================ */
+function buildFishboneSheet(){
+  const f=S.facts;
+  const cms=liveCms();
+  let rows="";
+  cms.forEach((c,i)=>{
+    const src=factorByRef(c.forRef);
+    rows+=`<tr><td class="no">${i+1}</td><td>${esc(cmLineText(c))}</td><td>${src?esc(src.text):""}</td></tr>`;
+  });
+  if(!rows) rows=`<tr><td class="no">—</td><td></td><td></td></tr>`;
+  return `<div class="fsheet fish">
+    <div class="fish-head"><span class="fish-title">魚の骨 原因分析図</span>
+      <table class="fish-meta"><tr><th>発生日時</th><td>${esc(fmtDateTime(f.datetime)||"")}</td><th>場所</th><td>${esc(f.place||"")}</td><th>運転者</th><td>${esc(f.driver||"")}</td><th>車両</th><td>${esc(f.vehicle||"")}</td></tr></table></div>
+    <div class="fishslot"></div>
+    <table class="fish-cms"><colgroup><col style="width:6%"><col style="width:64%"><col style="width:30%"></colgroup>
+      <tr><th>No.</th><th>対策（誰が・いつまでに・何を・どう確認）</th><th>対応する真因</th></tr>${rows}</table>
+  </div>`;
+}
+
+/* ---------- 重大違反 → 別ライン ---------- */
+function renderViolation(){
+  const f=S.facts;
+  const vlist=S.violations.map(k=>`<li>${esc(VIOMAP[k]?VIOMAP[k].t:k)}</li>`).join("")||"<li>（未選択）</li>";
+  const c=el(`<div>
+    <div class="bigwarn"><h2>⚠ これは重大な違反の可能性がある案件です</h2>
+      <p>チェックされた項目：</p><ul class="vlist">${vlist}</ul>
+      <p>このような<b>行為そのものが重い案件</b>は、現場での「再発防止の分析」だけで終わらせる話ではありません。
+      このアプリは<b>処分を決めません</b>。下の手順に従い、<b>経営判断・専門家</b>につないでください。</p></div>
+    <div class="routebox"><div style="font-weight:800;color:var(--navy);margin-bottom:6px">この後の流れ（別ライン）</div>
+      <div class="step"><div class="n">1</div><div>その場の安全確保・けが人対応。<b>ひき逃げ／人身／飲酒等は警察への届出が必須</b>です。</div></div>
+      <div class="step"><div class="n">2</div><div>事実だけを正確に記録（このページを印刷）。<b>本人を問い詰めて結論を急がない</b>。</div></div>
+      <div class="step"><div class="n">3</div><div><b>該当部署長 → 専務 → 社長</b> に速やかに報告。処分は<b>個人や現場で決めない</b>。</div></div>
+      <div class="step"><div class="n">4</div><div>処分・退職を検討する前に、<b>必ず顧問弁護士・社労士に相談</b>。就業規則の懲戒事由・本人の弁明の機会・手続きの確認を取る。</div></div></div>
+    <div class="card"><div style="font-weight:800;color:var(--navy);margin-bottom:8px;font-size:16px">最低限の事実メモ（連絡票に使えます）</div>
+      <div class="two">${miniField("発生日時","datetime","datetime-local")}${miniField("発生場所","place")}</div>
+      <div class="two">${miniField("運転者","driver")}${miniField("車両","vehicle")}</div>
+      <div class="field"><label>何が起きたか（事実のみ・推測や決めつけは書かない）</label><textarea id="vmemo">${esc(S.damage)}</textarea></div></div>
+    <div class="card"><div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn warn" id="vpr">🖨 連絡票を印刷（専務・社長へ）</button>
+        <button class="btn sec" id="vback">◀ 重大度の画面にもどる</button></div>
+      <div class="note" style="margin-top:10px">※処分の話と切り離して、別途<b>再発防止の分析</b>も行いたい場合は
+        <a href="javascript:void(0)" id="vanalyze" style="color:var(--blue);font-weight:700">こちらから分析を始める</a>（違反対応とは別物として扱ってください）。</div></div>
+  </div>`);
+  main.appendChild(c);
+  c.querySelectorAll("[data-fk]").forEach(inp=>{ inp.addEventListener("input",()=>{ S.facts[inp.dataset.fk]=inp.value; persist(); }); });
+  c.querySelector("#vmemo").addEventListener("input",e=>{ S.damage=e.target.value; persist(); });
+  c.querySelector("#vpr").onclick=()=>doPrint(buildViolationDoc());
+  c.querySelector("#vback").onclick=()=>{ view="wizard"; render(); };
+  c.querySelector("#vanalyze").onclick=()=>{ view="wizard"; step=1; render(); };
+}
+function miniField(label,key,type){ return `<div class="field"><label>${label}</label><input type="${type||"text"}" data-fk="${key}" value="${esc(S.facts[key]||"")}"></div>`; }
+function buildViolationDoc(){
+  const f=S.facts;
+  const vlist=S.violations.map(k=>`<li>${esc(VIOMAP[k]?VIOMAP[k].t:k)}</li>`).join("")||"<li>（未選択）</li>";
+  return `<div class="report"><h3>重大事故・違反 連絡票 <span class="needfix">※経営報告・要専門家相談</span></h3>
+    <table><colgroup><col style="width:18%"><col style="width:32%"><col style="width:18%"><col style="width:32%"></colgroup>
+      <tr><th>発生日時</th><td>${esc(fmtDateTime(f.datetime)||"")}</td><th>発生場所</th><td>${esc(f.place||"")}</td></tr>
+      <tr><th>運転者</th><td>${esc(f.driver||"")}</td><th>車両</th><td>${esc(f.vehicle||"")}</td></tr>
+      <tr><td class="sec" colspan="4">該当する重大違反（行為）</td></tr>
+      <tr><td colspan="4"><ol>${vlist}</ol></td></tr>
+      <tr><td class="sec" colspan="4">事実の記録（推測・決めつけを含めない）</td></tr>
+      <tr><td colspan="4">${esc(S.damage||"")}</td></tr></table>
+    <div class="bk" style="padding:6px 8px">※本票は事実連絡用です。<b>処分の判断材料ではありません</b>。報告：該当部署長 → 専務 → 社長。
+      退職・懲戒の検討に入る前に、<b>必ず顧問弁護士・社労士に相談</b>し、就業規則の懲戒事由・本人の弁明・手続きの相当性を確認してください。ひき逃げ・人身・飲酒等は警察への届出が必要です。</div></div>`;
+}
+function saveCase(){
+  const cases=JSON.parse(localStorage.getItem(LS_CASES)||"[]");
+  const rec=JSON.parse(JSON.stringify(S));
+  if(!rec.id){ rec.id="c"+(uid++)+"_"+(cases.length+1); rec.createdAt=new Date().toLocaleString("ja-JP"); }
+  rec.savedAt=new Date().toLocaleString("ja-JP");
+  rec.title=(S.facts.place||"事故")+"／"+(S.facts.driver||"");
+  const rootRefs=new Set(S.roots);
+  rec.red=S.cms.some(c=>rootRefs.has(c.forRef)&&scoreCM(c).lv==="bad");
+  rec.hasViolation=(S.violations||[]).length>0;
+  const idx=cases.findIndex(x=>x.id===rec.id);
+  if(idx>=0)cases[idx]=rec; else cases.push(rec);
+  try{ localStorage.setItem(LS_CASES,JSON.stringify(cases)); }
+  catch(e){ alert("保存に失敗しました（保存容量がいっぱいの可能性）。古い記録を削除してください。"); return; }
+  S.id=rec.id; alert("保存しました。『過去の記録』からいつでも見直せます。"); persist();
+}
+
+/* ============================================================
+   ナビ／ゲート
+   ============================================================ */
+function gate(){
+  if(step===0){ return S.severity ? null : "事故の重さを選んでください"; }
+  if(step===1){
+    const f=S.facts;
+    if(!f.datetime||!f.place||!f.driver) return "日時・場所・運転者は入れてください";
+    if(!f.accType) return "①自損か相手ありかを選んでください";
+    if(!f.vClass) return "②ぶつけた車の区分を選んでください";
+    return null;
+  }
+  if(step===2){ if(!S.timeline.some(t=>t.trim())) return "起きたことを1つ以上書いてください"; return null; }
+  if(step===3){ const need=minWhy(); const v=S.whys.filter(w=>w.answer.trim().length>=6&&w.bone); if(v.length<need) return `あと ${need-v.length} 段、骨を選んで掘りましょう（最低${need}段）`; return null; }
+  if(step===4){ if(!factorPool().some(f=>f.bone==="rule_mgmt")) return "「ルール・管理（会社の仕組み）」に最低1つ入れてください"; return null; }
+  if(step===5){ if(!S.roots.length) return "本当の原因を1つ以上選んでください"; return null; }
+  if(step===6){ const roots=S.roots.map(factorByRef).filter(Boolean); for(const r of roots){ if(!S.cms.some(c=>c.forRef===r.ref&&(c.what||"").trim())) return "すべての原因に対策（何を）を書いてください"; } return null; }
+  return null;
+}
+function updateNav(){
+  const g=gate(), nb=document.getElementById("nextBtn"), bb=document.getElementById("backBtn"), gm=document.getElementById("gateMsg");
+  bb.style.visibility = step===0 ? "hidden":"visible";
+  if(step===LAST){ nb.style.display="none"; }
+  else if(step===0 && S.violations.length>0){ nb.style.display=""; nb.textContent="重大違反の処理へ ▶"; nb.disabled=false; gm.textContent=""; return; }
+  else { nb.style.display=""; nb.textContent = step===LAST-1 ? "報告書へ ▶" : "次へ ▶"; }
+  if(g){ nb.disabled=true; gm.textContent="▶ "+g; } else { nb.disabled=false; gm.textContent=""; }
+}
+function next(){ if(step===0 && S.violations.length>0){ view="violation"; render(); return; } if(gate())return; if(step<LAST){ step++; render(); } }
+function back(){ if(step>0){ step--; render(); } }
+
+/* ============================================================
+   過去の記録 / 新規（新規は保存確認の窓を出す）
+   ============================================================ */
+function doNewCase(){ S=blankState(); step=0; view="wizard"; PRINT_ONLY.birth=""; printDoc="report"; persist(); render(); }
+function newCase(){
+  const hasInput = !!(S.severity||S.facts.datetime||S.facts.place||S.facts.driver||S.facts.vehicle||S.timeline.some(t=>t&&t.trim())||S.whys.some(w=>w.answer&&w.answer.trim())||(S.violations&&S.violations.length));
+  if(!hasInput){ doNewCase(); return; }
+  const m=document.getElementById("modal");
+  m.innerHTML=`<div class="modal-back"><div class="modal">
+    <h3>新しい記録を始めますか？</h3>
+    <div class="note">いま入力している内容があります。消える前に、どうするか選んでください。</div>
+    <div class="bigbtns">
+      <button class="btn go" onclick="__newSave()">💾 今の内容を保存してから、新しく始める</button>
+      <button class="btn warn" onclick="__newDiscard()">保存せずに、新しく始める</button>
+      <button class="btn sec" onclick="closeModal()">やめる（このまま続ける）</button>
+    </div></div></div>`;
+}
+function openCases(){
+  const cases=JSON.parse(localStorage.getItem(LS_CASES)||"[]").slice().reverse();
+  const m=document.getElementById("modal");
+  let list = cases.length ? "" : `<div class="note">まだ保存された記録はありません。</div>`;
+  list += `<div class="caselist">`;
+  cases.forEach(c=>{
+    const tag = c.hasViolation ? '<span class="tagmini" style="background:#992f27">重大違反</span>'
+      : c.red ? '<span class="tagmini" style="background:#d6453c">要再検討</span>' : '<span class="tagmini" style="background:#2e8b57">OK</span>';
+    list+=`<div class="ci"><div class="g"><div style="font-weight:700">${esc(c.title||"事故")} ${tag}</div>
+      <div class="when">${esc(c.savedAt||c.createdAt||"")}</div></div>
+      <button class="btn sec" data-act="open" data-id="${esc(c.id)}">開く</button>
+      <button class="iconbtn" title="削除" data-act="del" data-id="${esc(c.id)}">🗑</button></div>`;
+  });
+  list+=`</div>`;
+  m.innerHTML=`<div class="modal-back" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>過去の記録（この端末内）</h3>
+    <input type="text" id="csearch" placeholder="場所や名前で検索…" style="margin-bottom:8px">
+    <div id="clist">${list}</div>
+    <div style="text-align:right;margin-top:10px"><button class="btn sec" onclick="closeModal()">閉じる</button></div></div></div>`;
+  const se=m.querySelector("#csearch");
+  se.addEventListener("input",()=>{ const q=se.value.trim(); m.querySelectorAll(".ci").forEach(ci=>{ ci.style.display=(!q||ci.textContent.includes(q))?"":"none"; }); });
+  const cl=m.querySelector("#clist");
+  cl.addEventListener("click",e=>{ const b=e.target.closest("button[data-act]"); if(!b)return; const id=b.getAttribute("data-id"); if(b.getAttribute("data-act")==="open") loadCase(id); else delCase(id); });
+}
+function closeModal(){ document.getElementById("modal").innerHTML=""; }
+function loadCase(id){ const cases=JSON.parse(localStorage.getItem(LS_CASES)||"[]"); const c=cases.find(x=>x.id===id); if(!c)return; S=JSON.parse(JSON.stringify(c)); ensureShape(); PRINT_ONLY.birth=""; printDoc="report"; uid=Math.max(uid,maxIdNum(S)+1); view="wizard"; step=LAST; closeModal(); persist(); render(); }
+function delCase(id){ if(!confirm("この記録を削除しますか？"))return; let cases=JSON.parse(localStorage.getItem(LS_CASES)||"[]"); cases=cases.filter(x=>x.id!==id); localStorage.setItem(LS_CASES,JSON.stringify(cases)); openCases(); }
+
+/* ============================================================
+   起動
+   ============================================================ */
+window.next=next; window.back=back; window.openCases=openCases; window.newCase=newCase;
+window.closeModal=closeModal; window.loadCase=loadCase; window.delCase=delCase;
+window.closeLeaseEditor=closeLeaseEditor;
+window.__addLease=function(){ const i=document.getElementById("newlease"); if(i&&i.value.trim()){ addLease(i.value.trim()); openLeaseEditor(window.__leaseOnClose); } };
+window.__delLease=function(n){ removeLease(n); openLeaseEditor(window.__leaseOnClose); };
+window.__newSave=function(){ saveCase(); closeModal(); doNewCase(); };
+window.__newDiscard=function(){ closeModal(); doNewCase(); };
+(function init(){ if(!restore()){ S=blankState(); step=0; view="wizard"; } render(); })();
+</script>
+</body>
+</html>
