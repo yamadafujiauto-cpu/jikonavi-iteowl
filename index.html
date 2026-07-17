@@ -721,8 +721,8 @@ function stepFacts(){
   c.appendChild(g(factField("天候","晴れ／曇り／雨／雪 など","weather",["晴れ","曇り","雨","雪"]),
                   factField("路面","乾燥／ウェット／凍結 など","road",["乾燥","ウェット","凍結"])));
   /* ▼ 様式印字用の追加欄（設計 2.1。すべて任意入力＝ゲートに含めない） */
-  c.appendChild(g(factField("フリガナ","状況報告書に印字します。カタカナで","driverKana",null),
-                  sexField()));
+  /* フリガナ欄は専務判断で削除（状況報告書のフリガナ行は手書き用の空欄）。性別は単独欄で残す */
+  c.appendChild(sexField());
   c.appendChild(g(factField("車体番号","","vin",null),
                   factField("入庫予定修理工場（自車）","","repairShop",null)));
   c.appendChild(g(factField("警察届出（署・交番名）","届け出た警察署・交番名。届け出ていなければ空欄のまま","police",null),
@@ -1436,7 +1436,7 @@ function buildJokyoHokokusho(){
     <tr><th>登録番号</th><td colspan="3"></td><th>車名</th><td>${esc(f.vehicle||"")}</td></tr>
     <tr><th>車体番号</th><td colspan="5">${esc(f.vin||"")}</td></tr>
     <tr><th>事故日時</th><td colspan="5">${dateLine}</td></tr>
-    <tr><th>フリガナ<br>運転者名</th><td colspan="2"><div class="kanaline">${f.driverKana?esc(f.driverKana):"&nbsp;"}</div><div class="nameline">${esc(name)}</div></td><td>${circledList(["男","女"],f.driverSex)}</td><td colspan="2"><div class="note-fine">生年月日</div><span class="birthval">${esc(birthCellText(PRINT_ONLY.birth))}</span></td></tr>
+    <tr><th>フリガナ<br>運転者名</th><td colspan="2"><div class="kanaline">&nbsp;</div><div class="nameline">${esc(name)}</div></td><td>${circledList(["男","女"],f.driverSex)}</td><td colspan="2"><div class="note-fine">生年月日</div><span class="birthval">${esc(birthCellText(PRINT_ONLY.birth))}</span></td></tr>
     <tr><th>事故発生場所</th><td colspan="5"><span class="guide">都・道・府・県　　市・郡・町　　区　　町　　丁目　　番　　号</span><span class="placeval">${esc(f.place||"")}</span><div class="meishou"><span class="guide-inline">名称</span></div></td></tr>
     <tr><th>天候</th><td colspan="2">（　${circledList(["晴","曇","雨","雪"],f.weather)}　）</td><th>損害箇所</th><td colspan="2">${esc(S.damage||"")}</td></tr>
     <tr><th>路面</th><td colspan="2">（　${circledList(["乾燥","ウェット","凍結"],f.road)}　）</td><th>入庫予定修理工場</th><td colspan="2">${esc(f.repairShop||"")}<div class="guide-inline">TEL：</div></td></tr>
